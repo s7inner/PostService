@@ -1,4 +1,4 @@
-package ru.alishev.springcourse.FirstSecurityApp;
+package ua.moisak.PostService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

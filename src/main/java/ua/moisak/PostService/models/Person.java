@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Table(name = "Person")
@@ -18,24 +19,24 @@ public class Person {
     @Column(name = "username")
     private String username;
 
-    @NotEmpty(message = "email must not be empty")
-    @Column(name = "email")
-    @Email(message = "Not correct")
-    private String email;
-
     @Column(name = "password")
     private String password;
 
     @Column(name = "role")
     private String role;
 
+    //
+    @OneToMany(mappedBy = "person")
+    private List<Shipment> shipments;
+
+
     // Default constructor needed by Spring
     public Person() {
     }
 
-    public Person(String username, String email) {
+    public Person(String username) {
         this.username = username;
-        this.email = email;
+
     }
 
     public int getId() {
@@ -54,13 +55,7 @@ public class Person {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getPassword() {
         return password;
@@ -78,12 +73,19 @@ public class Person {
         this.role = role;
     }
 
+    public List<Shipment> getShipments() {
+        return shipments;
+    }
+
+    public void setShipments(List<Shipment> shipments) {
+        this.shipments = shipments;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", email=" + email +
                 ", password='" + password + '\'' +
                 '}';
     }

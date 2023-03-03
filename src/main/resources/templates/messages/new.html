@@ -2,40 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Log in - Brand</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-
 </head>
 <body>
-<!--&lt;!&ndash; navbar.html &ndash;&gt;-->
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-light">-->
-<!--    <a class="navbar-brand" href="#">My App</a>-->
-<!--    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--        <ul class="navbar-nav ml-auto">-->
-<!--            <li class="nav-item dropdown">-->
-<!--                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" sec:authorize="isAuthenticated()">-->
-<!--                    Welcome, <span sec:authentication="name"></span>!-->
-<!--                </a>-->
-<!--                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">-->
-<!--                    <a class="dropdown-item" href="#" sec:authorize="isAuthenticated()">My Profile</a>-->
-<!--                    <a class="dropdown-item" href="#" sec:authorize="!isAuthenticated()">Register</a>-->
-<!--                    <a class="dropdown-item" href="#" sec:authorize="!isAuthenticated()">Log In</a>-->
-<!--                    <a class="dropdown-item" href="#" sec:authorize="isAuthenticated()" th:href="@{/logout}">Log Out</a>-->
-<!--                </div>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</nav>-->
-
-
 <nav class="navbar navbar-dark navbar-expand-md sticky-top py-3 bg-dark" id="mainNav">
     <div class="container"><a class="navbar-brand d-flex align-items-center" href="/"><span class="bs-icon-sm bs-icon-circle bs-icon-primary shadow d-flex justify-content-center align-items-center mr-2 bs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-bezier">
           </svg></span><span><strong>Brand</strong></span></a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-3"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
@@ -45,13 +19,10 @@
                 <li class="nav-item"><a class="nav-link" href="/shipments/new">New Shipment</a></li>
                 <li class="nav-item"><a class="nav-link" href="pricing.html">Shipments</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                       sec:authorize="isAuthenticated()">
-                        <span th:text="${#authentication.isAuthenticated() ? 'Welcome, ' + #authentication.name : 'NonAuthorized'}"></span>
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" >
+                        Welcome, <span sec:authentication="name"></span>!
                     </a>
-<!--                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" sec:authorize="isAuthenticated()">-->
-<!--                        Welcome, <span sec:authentication="name"></span>!-->
-<!--                    </a>-->
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
                         <a class="dropdown-item" href="#" sec:authorize="isAuthenticated()">My Profile</a>
                         <a class="dropdown-item" href="http://localhost:8080/auth/registration" sec:authorize="!isAuthenticated()">Register</a>
@@ -67,19 +38,15 @@
     </div>
 </nav>
 
-<form th:action="@{/logout}" th:method="POST">
-    <input type="submit" value="Logout" />
+
+<form th:action="@{/messages/new}" th:object="${message}" method="post">
+
+  <div class="form-group">
+    <label for="content">Message Content</label>
+    <textarea th:field="*{content}" class="form-control" id="content" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Create Message</button>
 </form>
-<br>
-<a href="http://localhost:8080/auth/login">auth/login</a>
-<br>
-<a href="http://localhost:8080/auth/registration">auth/login</a>
-<br><br>
-<a href="http://localhost:8080/messages/new">messages/new</a>
-<br>
-<a href="http://localhost:8080/shipments/new">shipments/new</a>
-<br>
-<a href="http://localhost:8080/shipments/list">shipments/list</a>
 
 </body>
 </html>
