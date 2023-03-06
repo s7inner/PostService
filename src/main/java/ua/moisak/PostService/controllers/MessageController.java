@@ -10,11 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ua.moisak.PostService.models.Message;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.repositories.MessageRepository;
-import ua.moisak.PostService.services.UserServiceImpl;
+import ua.moisak.PostService.services.PersonDetailsService;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Controller
@@ -25,7 +22,7 @@ public class MessageController {
     private MessageRepository messageRepository;
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private PersonDetailsService personDetailsService;
 
     @GetMapping("/new")
     public String showNewMessageForm(Model model) {
@@ -36,7 +33,7 @@ public class MessageController {
     @PostMapping("/new")
     public String createNewMessage(@ModelAttribute("message") Message message) {
 
-        Optional<Person> author = userServiceImpl.getCurrentUser(); // get the currently authenticated user
+        Optional<Person> author = personDetailsService.getCurrentUser(); // get the currently authenticated user
         message.setAuthor(author.get()); // set the author of the message
         messageRepository.save(message); // save the message to the database
         return "redirect:/messages/" + message.getId(); // redirect to the newly created message page

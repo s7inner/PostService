@@ -1,6 +1,8 @@
 package ua.moisak.PostService.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,5 +31,15 @@ public class PersonDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
 
         return new PersonDetails(person.get());
+    }
+
+    public Optional<Person> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String usermane = authentication.getName();
+        return peopleRepository.findByUsername(usermane);
+    }
+
+    public void updateEmail(String oldEmail, String newEmail) {
+        peopleRepository.updateEmail(oldEmail, newEmail);
     }
 }

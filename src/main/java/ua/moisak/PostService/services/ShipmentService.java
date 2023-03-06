@@ -59,15 +59,15 @@ public class ShipmentService {
     }
 
     // get all shipments for a person
-    public List<Shipment> getAllShipmentsForPerson(Integer personId) {
-        Optional<Person> optionalPerson = peopleRepository.findById(personId);
-        if (optionalPerson.isPresent()) {
-            Person person = optionalPerson.get();
-            return person.getShipments();
-        } else {
-            throw new IllegalArgumentException("Person with id " + personId + " not found");
-        }
-    }
+//    public List<Shipment> getAllShipmentsForPerson(Integer personId) {
+//        Optional<Person> optionalPerson = peopleRepository.findById(personId);
+//        if (optionalPerson.isPresent()) {
+//            Person person = optionalPerson.get();
+//            return person.getShipments();
+//        } else {
+//            throw new IllegalArgumentException("Person with id " + personId + " not found");
+//        }
+//    }
 
     // get a shipment by id
     public Optional<Shipment> getShipmentById(Integer id) {

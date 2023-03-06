@@ -7,7 +7,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "Person")
+@Table(name = "person")
 public class Person {
     @Id
     @Column(name = "id")
@@ -25,18 +25,25 @@ public class Person {
     @Column(name = "role")
     private String role;
 
-    //
-    @OneToMany(mappedBy = "person")
-    private List<Shipment> shipments;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "person_id")
+//    private Profile profile;
+
+    @OneToOne(mappedBy = "person")
+    private Profile profile;
+
+
+//    @OneToMany(mappedBy = "person")
+//    private List<Shipment> shipments;
 
 
     // Default constructor needed by Spring
     public Person() {
     }
 
-    public Person(String username) {
+    public Person(String username,String role) {
         this.username = username;
-
+        this.role = role;
     }
 
     public int getId() {
@@ -55,7 +62,13 @@ public class Person {
         this.username = username;
     }
 
+    public Profile getProfile() {
+        return profile;
+    }
 
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 
     public String getPassword() {
         return password;
@@ -73,13 +86,6 @@ public class Person {
         this.role = role;
     }
 
-    public List<Shipment> getShipments() {
-        return shipments;
-    }
-
-    public void setShipments(List<Shipment> shipments) {
-        this.shipments = shipments;
-    }
 
     @Override
     public String toString() {

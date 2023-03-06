@@ -3,17 +3,12 @@ package ua.moisak.PostService.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ua.moisak.PostService.models.Message;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.models.Shipment;
 import ua.moisak.PostService.repositories.ShipmentRepository;
-import ua.moisak.PostService.services.RegistrationService;
-import ua.moisak.PostService.services.UserServiceImpl;
-import ua.moisak.PostService.util.PersonValidator;
+import ua.moisak.PostService.services.PersonDetailsService;
 
-import javax.validation.Valid;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -28,7 +23,7 @@ public class ShipmentController {
     private ShipmentRepository shipmentRepository;
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private PersonDetailsService personDetailsService;
 
     // GET all shipments
     @GetMapping("list")
@@ -62,7 +57,7 @@ public class ShipmentController {
 
         String inv = generateUniqueNumber(stringsFonUnicueNumber);
 
-        Optional<Person> author = userServiceImpl.getCurrentUser(); // get the currently authenticated user
+        Optional<Person> author = personDetailsService.getCurrentUser(); // get the currently authenticated user
         shipment.setPerson(author.get()); // set the author of the message
         shipment.setInvoice(inv);
         shipmentRepository.save(shipment); // save the message to the database
