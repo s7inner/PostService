@@ -22,6 +22,12 @@ public class HelloController {
         return "hello";
     }
 
+
+    @GetMapping("/profile")
+    public String getProfile() {
+        return "profile";
+    }
+
     @GetMapping("/showUserInfo")
     public String showUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
