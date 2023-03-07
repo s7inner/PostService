@@ -1,12 +1,19 @@
 package ua.moisak.PostService.models;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
 @Table(name = "person")
 public class Person {
     @Id
@@ -25,19 +32,16 @@ public class Person {
     @Column(name = "role")
     private String role;
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "person_id")
-//    private Profile profile;
-
-    @OneToOne(mappedBy = "person")
+//    @OneToOne(mappedBy = "person")
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     private Profile profile;
 
 
-//    @OneToMany(mappedBy = "person")
-//    private List<Shipment> shipments;
+//    @OneToOne(mappedBy = "person")
 
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private List<Shipment> shipments;
 
-    // Default constructor needed by Spring
     public Person() {
     }
 
@@ -46,53 +50,9 @@ public class Person {
         this.role = role;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public boolean shipmentsIsEmpty(){
+        return this.shipments.isEmpty();
     }
 
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

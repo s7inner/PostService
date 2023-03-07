@@ -31,6 +31,7 @@
               <span >Profile</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
+              <a class="dropdown-item" href="/profile">My Profile</a>
               <a class="dropdown-item" href="/changeCredentials">Change Credentials</a>
             </div>
           </li>
@@ -51,7 +52,7 @@
               <span >Employer</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-              <a class="dropdown-item" href="#">Create a new shipment</a>
+              <a class="dropdown-item" href="/shipments/new">Create a new shipment</a>
               <a class="dropdown-item" href="#">List of created shipments</a>
             </div>
           </li>
@@ -141,7 +142,7 @@
                             <div class="mb-3"><label class="form-label" ><strong>Full Name</strong></label><input class="form-control" type="text" id="fullName" placeholder="Peter Jone White"  required="" name="fullName" th:field="*{fullName}" ></div>
                           </div>
                           <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="peter@example.com" required="" name="email" th:value="${username}" readonly></div>
+                            <div class="mb-3"><label class="form-label" ><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="peter@example.com" required="" name="email" readonly th:field="*{email}"></div>
                           </div>
                         </div>
                         <div class="row">

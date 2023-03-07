@@ -7,9 +7,11 @@ import ua.moisak.PostService.models.Profile;
 import ua.moisak.PostService.repositories.PeopleRepository;
 import ua.moisak.PostService.repositories.ProfileRepository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
@@ -23,27 +25,27 @@ public class ProfileService {
         this.peopleRepository = peopleRepository;
     }
 
-    @Transactional
 
     public void createProfile(Profile profile) {
-        Person person = personDetailsService.getCurrentUser().get();
+        Person person = personDetailsService.getCurrentUser();
+        Profile profileFromRelation = person.getProfile();
+
+        profile.setEmail(person.getUsername());
 
         //якщо person вже має профіль
-        if(person.getProfile()!=null){
-            profileRepository.deleteById(person.getProfile().getId());
-        }
-
-        //якщо користувач оновив email -> змінити username в Person
-        if (!person.getUsername().equals(profile.getEmail())){
-            person.setUsername(profile.getEmail());
-           peopleRepository.save(person);
-
-
+        if(profileFromRelation!=null){
+            deleteById(profileFromRelation.getId());
         }
 
         profile.setPerson(person);
         profileRepository.save(profile);
     }
+
+    public void deleteById(Integer id) {
+       profileRepository.deleteById(id);
+    }
+
+
 
 }
 

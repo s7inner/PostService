@@ -7,13 +7,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.repositories.PeopleRepository;
 import ua.moisak.PostService.security.PersonDetails;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class PersonDetailsService implements UserDetailsService {
 
     private final PeopleRepository peopleRepository;
@@ -33,13 +37,26 @@ public class PersonDetailsService implements UserDetailsService {
         return new PersonDetails(person.get());
     }
 
-    public Optional<Person> getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usermane = authentication.getName();
-        return peopleRepository.findByUsername(usermane);
+
+    public Person findById(Integer id) {
+        return peopleRepository.findById(id).orElse(null);
     }
 
-    public void updateEmail(String oldEmail, String newEmail) {
-        peopleRepository.updateEmail(oldEmail, newEmail);
+    public Person getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String usermane = authentication.getName();
+        return peopleRepository.findByUsername(usermane).orElse(null);
+    }
+
+    public void delete(Person person) {
+       peopleRepository.delete(person);
+    }
+
+    public void save(Person person) {
+        peopleRepository.save(person);
+    }
+
+    public String[] getListFromString(String str) {
+        return  str.split(",");
     }
 }

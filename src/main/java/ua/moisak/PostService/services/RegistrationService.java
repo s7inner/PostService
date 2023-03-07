@@ -8,6 +8,7 @@ import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.repositories.PeopleRepository;
 
 @Service
+@Transactional
 public class RegistrationService {
 
     private final PeopleRepository peopleRepository;
@@ -19,10 +20,16 @@ public class RegistrationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
     public void register(Person person) {
-        person.setPassword(passwordEncoder.encode(person.getPassword()));
-//        person.setRole("ROLE_USER");
+        person.setPassword(encodePassword(person.getPassword()));
+        save(person);
+    }
+
+    public String encodePassword(String password) {
+        return  passwordEncoder.encode(password);
+    }
+
+    public void save(Person person){
         peopleRepository.save(person);
     }
 

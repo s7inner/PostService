@@ -7,11 +7,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ua.moisak.PostService.models.Person;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Optional;
 
 @Repository
 public interface PeopleRepository extends JpaRepository<Person, Integer> {
     Optional<Person> findByUsername(String username);
+
+    Optional<Person> findById(Integer id);
 
     void deleteByUsername(String username);
 
