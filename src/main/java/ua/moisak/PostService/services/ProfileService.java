@@ -16,33 +16,28 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final PersonDetailsService personDetailsService;
-    private final PeopleRepository peopleRepository;
 
-
-    public ProfileService(ProfileRepository profileRepository, PersonDetailsService personDetailsService, PeopleRepository peopleRepository) {
+    public ProfileService(ProfileRepository profileRepository, PersonDetailsService personDetailsService) {
         this.profileRepository = profileRepository;
         this.personDetailsService = personDetailsService;
-        this.peopleRepository = peopleRepository;
     }
-
 
     public void createProfile(Profile profile) {
         Person person = personDetailsService.getCurrentUser();
-        Profile profileFromRelation = person.getProfile();
-
-        profile.setEmail(person.getUsername());
 
         //якщо person вже має профіль
-        if(profileFromRelation!=null){
-            deleteById(profileFromRelation.getId());
+        if (person.getProfile() != null) {
+            Profile profileFromRelation = person.getProfile();
+
+            profileFromRelation.setFullName(profile.getFullName());
+            profileFromRelation.setPhone(profile.getPhone());
+            profileFromRelation.setEmail(person.getUsername());
+            profileFromRelation.setAddress(profile.getAddress());
+            profileRepository.save(profileFromRelation);
+        } else {
+            profile.setPerson(person);
+            profileRepository.save(profile);
         }
-
-        profile.setPerson(person);
-        profileRepository.save(profile);
-    }
-
-    public void deleteById(Integer id) {
-       profileRepository.deleteById(id);
     }
 
     public void updateEmail(Person person) {
