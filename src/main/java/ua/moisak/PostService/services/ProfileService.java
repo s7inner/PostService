@@ -45,6 +45,10 @@ public class ProfileService {
        profileRepository.deleteById(id);
     }
 
+    public void updateEmail(Person person) {
+        // update corresponding shipment senderEmail
+        profileRepository.updateSenderEmail(person.getUsername(), person.getId());
+    }
 
 
 }

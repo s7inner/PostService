@@ -12,8 +12,6 @@ import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.repositories.PeopleRepository;
 import ua.moisak.PostService.security.PersonDetails;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,6 +19,7 @@ import java.util.Optional;
 public class PersonDetailsService implements UserDetailsService {
 
     private final PeopleRepository peopleRepository;
+
 
     @Autowired
     public PersonDetailsService(PeopleRepository peopleRepository) {
@@ -35,6 +34,9 @@ public class PersonDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
 
         return new PersonDetails(person.get());
+    }
+    public Person findByUsername(String username) {
+        return peopleRepository.findByUsername(username).orElse(null);
     }
 
 

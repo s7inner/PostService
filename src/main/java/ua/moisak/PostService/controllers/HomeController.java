@@ -23,16 +23,14 @@ public class HomeController {
 
     private final PersonDetailsService personDetailsService;
     private final ProfileService profileService;
-    private final PersonValidator personValidator;
     private final RegistrationService registrationService;
 
     private final ShipmentService shipmentService;
 
 
-    public HomeController(PersonDetailsService personDetailsService, ProfileService profileService, PersonValidator personValidator, RegistrationService registrationService, ShipmentService shipmentService) {
+    public HomeController(PersonDetailsService personDetailsService, ProfileService profileService, RegistrationService registrationService, ShipmentService shipmentService) {
         this.personDetailsService = personDetailsService;
         this.profileService = profileService;
-        this.personValidator = personValidator;
         this.registrationService = registrationService;
         this.shipmentService = shipmentService;
     }
@@ -53,68 +51,69 @@ public class HomeController {
     @PostMapping("/changeCredentials")
     @PreAuthorize("isAuthenticated()")
     public String postChangeCredentials(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult) {
+//        personValidator.validate(person, bindingResult);
+//
+//        if (bindingResult.hasErrors())
+//            return "/home/changeCredentials";
+
         Person currentUser = personDetailsService.getCurrentUser();
         String[] passwords = personDetailsService.getListFromString(person.getPassword());
-//        String[] logins = personDetailsService.getListFromString(person.getUsername());
 
-        //null or empty check
-        if(person.getPassword()!=null && !person.getPassword().isEmpty()){
-//            Profile profile = currentUser.getProfile();
-//            List<Shipment> shipments = currentUser.getShipments();
-
-            //changing login
-            if(!currentUser.getUsername().equals(person.getUsername()) && passwords.length==1){
-//                //перевіряє чи юзер з такии ім'ям уже існує
-//                personValidator.validate(person, bindingResult);
-//                if (bindingResult.hasErrors())
-//                    return "/home/changeCredentials";
-
-                currentUser.setUsername(person.getUsername());
-                shipmentService.updateEmail(currentUser);
-                personDetailsService.save(currentUser);
-                return "redirect:/auth/login";
-            }
-            else if(passwords.length==2 && passwords[0].equals(passwords[1]) && !currentUser.getUsername().equals(person.getUsername())){
-                currentUser.setPassword(registrationService.encodePassword(passwords[0]));
-                personDetailsService.save(currentUser);
-
-                return "redirect:/auth/login";
-            }else if(passwords[0].equals(passwords[1])){
-                currentUser.setUsername(person.getUsername());
-                currentUser.setPassword(registrationService.encodePassword(passwords[0]));
-
-                shipmentService.updateEmail(currentUser);
-                personDetailsService.save(currentUser);
-
-                return "redirect:/auth/login";
-            }
+        // nothing to entered
+        if(person.getUsername()==null && person.getPassword()==null){
+            return "home/changeCredentials";
         }
 
+        // check if current password entered
+        if(passwords[0].length()>0){
+            boolean enteredAndCurrentPasswordsMath = registrationService.matches(passwords[0], currentUser.getPassword());
+
+            // if matches passwords to enable change credentials
+            if(enteredAndCurrentPasswordsMath){
+
+                //change login, check if login entered
+                if(person.getUsername()!=null&&passwords.length==1) {
+                    //check if user exist with this username
+                    if (personDetailsService.findByUsername(person.getUsername()) == null) {
+                        //set entered email from form
+                        currentUser.setUsername(person.getUsername());
+                        //update email in other tables
+                        profileService.updateEmail(currentUser);
+                        shipmentService.updateEmail(currentUser);
+                        //------------save in db-----------
+                        personDetailsService.save(currentUser);
+                        return "redirect:/auth/login";
+                    }
+                }
+                //change password, check if password entered
+                else if(person.getUsername().equals("")&&passwords.length==3){
+
+                    //check if newPassword and confirmPassword equal
+                    if(passwords[1].equals(passwords[2])){
+                        currentUser.setPassword(registrationService.encodePassword(passwords[2]));
+                        personDetailsService.save(currentUser);
+
+                        return "redirect:/auth/login";
+                    }
+
+                }else if(!person.getUsername().equals("")&&passwords.length==3){
+                    if (personDetailsService.findByUsername(person.getUsername()) == null && passwords[1].equals(passwords[2])) {
+                        //changing login and password
+                        currentUser.setUsername(person.getUsername());
+                        currentUser.setPassword(registrationService.encodePassword(passwords[1]));
+
+                        profileService.updateEmail(currentUser);
+                        shipmentService.updateEmail(currentUser);
+                        personDetailsService.save(currentUser);
+
+                        return "redirect:/auth/login";
+                    }
+                }
 
 
-
-//        if(person.getUsername()==null || person.getUsername().isEmpty()){
-//            person.setUsername(currentUser.getUsername());
-//        }
-//        if(person.getPassword()==null || person.getPassword().isEmpty()){
-//            person.setPassword(currentUser.getPassword());
-//            person.setRole(currentUser.getRole());
-//            person.setProfile(currentUser.getProfile());
-//            person.setShipments(currentUser.getShipments());
-//
-//            personDetailsService.delete(currentUser);
-//            personDetailsService.save(person);
-//
-//        }else {
-//            person.setRole(currentUser.getRole());
-//            person.setProfile(currentUser.getProfile());
-//            person.setShipments(currentUser.getShipments());
-//
-//            personDetailsService.delete(currentUser);
-//            registrationService.register(person);
-//        }
-
-        return "redirect:/auth/login";
+            }
+        }
+        return "home/changeCredentials";
     }
 
     @Transactional // add
