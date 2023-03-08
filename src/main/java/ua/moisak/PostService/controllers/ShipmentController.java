@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ua.moisak.PostService.enums.ShipmentStatus;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.models.Profile;
 import ua.moisak.PostService.models.Shipment;
@@ -11,9 +13,11 @@ import ua.moisak.PostService.repositories.ShipmentRepository;
 import ua.moisak.PostService.services.PersonDetailsService;
 import ua.moisak.PostService.services.ShipmentService;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -28,13 +32,13 @@ public class ShipmentController {
         this.personDetailsService = personDetailsService;
     }
 
-//    // GET all shipments
-//    @GetMapping("list")
-//    public String getAllShipments(Model model) {
-//        List<Shipment> shipments = shipmentRepository.findAll();
-//        model.addAttribute("shipments", shipments);
-//        return "shipments/list";
-//    }
+    // GET all shipments
+    @GetMapping("list")
+    public String getAllShipments(Model model) {
+        List<Shipment> shipments = shipmentService.findAll();
+        model.addAttribute("shipments", shipments);
+        return "shipments/list";
+    }
 
     // Creating new Shipment--------------------------------------------------
     @Transactional
@@ -53,13 +57,14 @@ public class ShipmentController {
         }else if(!person.shipmentsIsEmpty()) {
             model.addAttribute("shipment", shipmentService.findLastShipment());
         }else {
+            shipment.setSenderEmail(person.getUsername());
             model.addAttribute("shipment",shipment);
         }
         return "/shipments/new";
     }
 
     @PostMapping("/new")
-    public String createNewShipment(@ModelAttribute("shipment") Shipment shipment) {
+    public String createNewShipment(@ModelAttribute("shipment") Shipment shipment, @RequestParam("photo") MultipartFile photo) throws IOException {
 
         String[] stringsFonUnicueNumber = {
                 shipment.getSenderFullName(),
@@ -75,11 +80,16 @@ public class ShipmentController {
 
         String inv = shipmentService.generateUniqueNumber(stringsFonUnicueNumber);
         shipment.setInvoice(inv);
+        shipment.setStatus(ShipmentStatus.PENDING);
         shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());
-        Person person = personDetailsService.getCurrentUser(); // get the currently authenticated user
-        shipment.setPerson(person); // set the author of the message
-        shipmentService.save(shipment); // save the message to the database
-        return "/shipments/new"; // redirect to the newly created message page
+        shipment.setShipmentPhoto(photo.getBytes());
+        shipment.setLocalDateTime(shipment.getLocalDateTimeWithFormatter());
+
+
+        Person person = personDetailsService.getCurrentUser();
+        shipment.setPerson(person);
+        shipmentService.save(shipment);
+        return "/shipments/new";
     }
 
     //-----------------------------------------------------------------------

@@ -109,8 +109,6 @@ public class HomeController {
                         return "redirect:/auth/login";
                     }
                 }
-
-
             }
         }
         return "home/changeCredentials";

@@ -53,7 +53,7 @@
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
               <a class="dropdown-item" href="/shipments/new">Create a new shipment</a>
-              <a class="dropdown-item" href="#">List of created shipments</a>
+              <a class="dropdown-item" href="/shipments/list">List of created shipments</a>
             </div>
           </li>
           <!-- --->
@@ -134,9 +134,9 @@
                       <p class="text-primary m-0 fw-bold">Shipment Data</p>
                     </div>
                     <div class="card-body">
-                      <form th:action="@{/shipments/new}" th:object="${shipment}" method="post" class="">
+                      <form th:action="@{/shipments/new}" th:object="${shipment}" enctype="multipart/form-data" method="post">
                         <div class=" form-row">
-                          <h4 class="font-weight-bold">Sender information:</h4>
+                          <h4 class="font-weight-bold text-black">Sender information:</h4>
                         </div>
                         <div class="row">
                           <div class="col-md-4">
@@ -145,7 +145,7 @@
                           </div>
                           <div class="col-md-4">
                             <label for="senderEmail">Email:</label>
-                            <input th:field="*{senderEmail}" type="email" class="form-control" id="senderEmail" placeholder="peter@gmail.com" required="required" value="peter@gmail.com">
+                            <input th:field="*{senderEmail}" type="email" class="form-control" id="senderEmail" placeholder="peter@gmail.com" required="required" value="peter@gmail.com" readonly>
                           </div>
                           <div class="col-md-4">
                             <label for="senderPhone">Phone number:</label>
@@ -159,11 +159,11 @@
                           </div>
                           <div class="form-group col-md-4">
                             <label for="loadingDate">Loading date:</label>
-                            <input th:field="*{loadingDate}" type="text" class="form-control" id="loadingDate" placeholder="10.10.2023" value="10.10.2023" required="required">
+                            <input th:field="*{loadingDate}" type="date" value="09.03.2023" class="form-control" id="loadingDate" placeholder="10.10.2023" required="required">
                           </div>
                         </div>
                         <div class="form-row mt-4">
-                          <h4 class="font-weight-bold">Recipient information:</h4>
+                          <h4 class="font-weight-bold text-black">Recipient information:</h4>
                         </div>
                         <div class="row my-3">
                           <div class="form-group col-md-4">
@@ -186,27 +186,15 @@
                           </div>
                           <div class="form-group col-md-4">
                             <label for="unloadingDate">Unloading date:</label>
-                            <input th:field="*{unloadingDate}" type="text" class="form-control" id="unloadingDate" placeholder="10.11.2023" value="10.11.2023" required="required">
+                            <input th:field="*{unloadingDate}" type="date" class="form-control" id="unloadingDate" placeholder="10.11.2023" required="required">
                           </div>
                         </div>
                         <div class="form-row mt-4">
-                          <h4 class="font-weight-bold">Shipment information:</h4>
+                          <h4 class="font-weight-bold text-black">Shipment information:</h4>
                         </div>
                         <div class="form-row pb-0">
-                          <label for="shipmentType">Brief information about the shipment that will be displayed in the header:</label>
-                          <select th:field="*{shipmentType}" id="shipmentType" class="form-control" required="required">
-                            <option value="raw_materials">Raw materials</option>
-                            <option value="finished_goods">Finished goods</option>
-                            <option value="construction_materials">Construction materials</option>
-                            <option value="hazardous_materials">Hazardous materials</option>
-                            <option value="perishable_goods">Perishable goods</option>
-                            <option value="oversized_cargo" selected>Oversized cargo</option>
-                            <option value="livestock">Livestock</option>
-                            <option value="personal_effects">Personal effects</option>
-                            <option value="art_and_antiques">Art and antiques</option>
-                            <option value="vehicles">Vehicles</option>
-                          </select>
-<!--                          <input th:field="*{shipmentShortDescription}" type="text" class="form-control" id="shipmentShortDescription" placeholder="Household items, service, and several suitcases" value="Household items, service, and several suitcases" required="">-->
+                          <label for="shipmentShortDescription">Brief information about the shipment that will be displayed in the header:</label>
+                          <input th:field="*{shipmentShortDescription}" type="text" class="form-control" id="shipmentShortDescription" placeholder="Raw materials, containers with materials for processing" required="required">
                         </div>
                         <div class="row my-3">
                           <div class="form-group col-md-2">
@@ -242,9 +230,9 @@
                           <textarea th:field="*{shipmentLongDescription}" class="form-control" id="shipmentLongDescription" rows="3"></textarea>
                         </div>
                         <div class="form-row">
-                          <div class="form-group col-md-6">
-                            <!--              <label class="mr-2">Upload a photo of the shipment:</label>-->
-                            <!--              <input type="file" name="file" id="file">-->
+                          <div class="form-group col-md-6 pt-2">
+                            <label class="mr-2">Upload a photo:</label>
+                            <input  type="file" class="form-control-file" id="photo" name="photo" required>
                           </div>
                         </div>
                         <div class="form-row mt-3">

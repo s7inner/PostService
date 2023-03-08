@@ -48,16 +48,8 @@ public class ShipmentService {
         return new Shipment();
     }
 
-    // create a new shipment
-    public Shipment createShipment(Integer personId, Shipment shipment) {
-        Optional<Person> optionalPerson = peopleRepository.findById(personId);
-        if (optionalPerson.isPresent()) {
-            Person person = optionalPerson.get();
-            shipment.setPerson(person);
-            return shipmentRepository.save(shipment);
-        } else {
-            throw new IllegalArgumentException("Person with id " + personId + " not found");
-        }
+    public List<Shipment> findAll() {
+        return  shipmentRepository.findAll();
     }
 
     public Shipment getShipmentForGetMappingFillProfileData(Profile profile) {
@@ -84,7 +76,7 @@ public class ShipmentService {
         }
 
         // take the first 10 bytes of the hashed bytes array and convert it to a string of hexadecimal characters
-        byte[] first10Bytes = Arrays.copyOf(hashedBytes, 10);
+        byte[] first10Bytes = Arrays.copyOf(hashedBytes, 8);
         StringBuilder hexStringBuilder = new StringBuilder();
         for (byte b : first10Bytes) {
             hexStringBuilder.append(String.format("%02x", b));

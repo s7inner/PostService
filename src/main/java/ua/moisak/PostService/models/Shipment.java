@@ -3,12 +3,25 @@ package ua.moisak.PostService.models;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import ua.moisak.PostService.enums.ShipmentStatus;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -54,8 +67,8 @@ public class Shipment {
     @Column(name = "unloading_date", nullable = false)
     private String unloadingDate;
 
-    @Column(name = "shipment_type", nullable = false)
-    private String shipmentType;
+    @Column(name = "shipment_short_description", nullable = false)
+    private String shipmentShortDescription;
 
     @Column(name = "shipment_weight", nullable = false)
     private Integer shipmentWeight;
@@ -81,17 +94,46 @@ public class Shipment {
     @Column(name = "shipment_long_description", nullable = false)
     private String shipmentLongDescription;
 
-    //    @ManyToOne(fetch = FetchType.EAGER)
+    @Column(name = "shipment_photo", columnDefinition = "bytea")
+    private byte[] shipmentPhoto;
+
+    @Column(name = "local_date_time", nullable = false)
+    private String localDateTime;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ShipmentStatus status;
+
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
     private Person person;
+
+    public static int idForView=1;
+
 
     // constructor, getters and setters
     public Shipment() {
 
     }
 
+    public static int getIdForView() {
+        return idForView++;
+    }
+
+    public static int getNumberOfShipmentsForCurrentUser() {
+        return idForView;
+    }
+
+    public String getLocalDateTimeWithFormatter() {
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String formattedDate = localDateTime.format(format);
+        return formattedDate;
+    }
+
     public Integer calculateWeightVolumetric() {
         return (shipmentLength * shipmentWidth * shipmentHeight) / 4000;
     }
+
+
 }
