@@ -48,9 +48,7 @@ public class ShipmentService {
         return new Shipment();
     }
 
-    public List<Shipment> findAll() {
-        return  shipmentRepository.findAll();
-    }
+
 
     public Shipment getShipmentForGetMappingFillProfileData(Profile profile) {
         Shipment shipment = new Shipment();
@@ -94,6 +92,14 @@ public class ShipmentService {
         // update corresponding shipment senderEmail
         shipmentRepository.updateSenderEmail(person.getUsername(), person.getId());
     }
+
+    public List<Shipment> findAll() {
+        return  shipmentRepository.findAll();
+    }
+    public List<Shipment> findAllInDescOrder() {
+       return shipmentRepository.findAllInDescOrder();
+    }
+
     // get all shipments for a person
 //    public List<Shipment> getAllShipmentsForPerson(Integer personId) {
 //        Optional<Person> optionalPerson = peopleRepository.findById(personId);

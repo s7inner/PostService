@@ -180,7 +180,7 @@
                             <table class="table text-center table-striped table-borderless">
                                 <thead>
                                 <tr>
-                                    <th scope="col">ID</th>
+                                    <th scope="col">Photo</th>
                                     <th scope="col">Invoice</th>
                                     <th scope="col">Creation Time</th>
                                     <th scope="col">Price($)</th>
@@ -190,9 +190,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="shipment : ${shipments}">
-                                    <td th:text="${shipment.idForView}"></td>
-                                    <td><a href="#" th:text="${shipment.invoice}"></a></td>
+                                <tr class="table-image" th:each="shipment : ${shipments}" style="vertical-align: middle;">
+                                    <th scope="row"><img alt=""
+                                                         th:src="*{'data:image/jpeg;base64,'+{shipment.shipmentPhoto}}"
+                                                         style="width: 100px;height: 100px;"></th>
+                                    <td th:text="${shipment.invoice}"></td>
                                     <td th:text="${shipment.localDateTime}"></td>
                                     <td th:text="${shipment.shipmentPrice}"></td>
                                     <td th:text="${shipment.status}"></td>
@@ -250,6 +252,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="/assets/js/bs-init.js"></script>
 <script src="/assets/js/theme.js"></script>
+
+
 </body>
 
 </html>

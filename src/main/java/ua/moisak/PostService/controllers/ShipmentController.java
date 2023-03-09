@@ -12,11 +12,13 @@ import ua.moisak.PostService.models.Shipment;
 import ua.moisak.PostService.repositories.ShipmentRepository;
 import ua.moisak.PostService.services.PersonDetailsService;
 import ua.moisak.PostService.services.ShipmentService;
+import ua.moisak.PostService.util.ImageUtil;
 
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +37,7 @@ public class ShipmentController {
     // GET all shipments
     @GetMapping("list")
     public String getAllShipments(Model model) {
-        List<Shipment> shipments = shipmentService.findAll();
+        List<Shipment> shipments = shipmentService.findAllInDescOrder();
         model.addAttribute("shipments", shipments);
         return "shipments/list";
     }
@@ -64,7 +66,8 @@ public class ShipmentController {
     }
 
     @PostMapping("/new")
-    public String createNewShipment(@ModelAttribute("shipment") Shipment shipment, @RequestParam("photo") MultipartFile photo) throws IOException {
+    public String createNewShipment(@ModelAttribute("shipment") Shipment shipment,
+                                    @RequestParam("photo") MultipartFile photo) throws IOException {
 
         String[] stringsFonUnicueNumber = {
                 shipment.getSenderFullName(),
@@ -82,9 +85,10 @@ public class ShipmentController {
         shipment.setInvoice(inv);
         shipment.setStatus(ShipmentStatus.PENDING);
         shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());
-        shipment.setShipmentPhoto(photo.getBytes());
-        shipment.setLocalDateTime(shipment.getLocalDateTimeWithFormatter());
 
+        //compress photo and set
+        shipment.setShipmentPhoto(Base64.getEncoder().encodeToString(photo.getBytes()));
+        shipment.setLocalDateTime(shipment.getLocalDateTimeWithFormatter());
 
         Person person = personDetailsService.getCurrentUser();
         shipment.setPerson(person);
