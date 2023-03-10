@@ -1,5 +1,6 @@
 package ua.moisak.PostService.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -14,6 +15,7 @@ import ua.moisak.PostService.services.PersonDetailsService;
 import ua.moisak.PostService.services.ShipmentService;
 import ua.moisak.PostService.util.ImageUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -45,6 +47,7 @@ public class ShipmentController {
     // Creating new Shipment--------------------------------------------------
     @Transactional
     @GetMapping("/new")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
     public String showNewShipmentForm(Model model) {
         Person person = personDetailsService.getCurrentUser();
         Profile profile = person.getProfile();
@@ -66,9 +69,45 @@ public class ShipmentController {
     }
 
     @PostMapping("/new")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
     public String createNewShipment(@ModelAttribute("shipment") Shipment shipment,
                                     @RequestParam("photo") MultipartFile photo) throws IOException {
 
+        shipmentService.save(setAdditionFields(shipment,photo));
+        return "/shipments/new";
+    }
+
+    //DELETE shipment by id using @RequestParam - get object from model with attribute name = "", with value id
+
+    @PostMapping("/delete")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    public String deleteShipment(@RequestParam("id") Integer id) {
+        shipmentService.deleteById(id);
+        return "redirect:/shipments/list";
+    }
+
+    //UPDATE shipment by id using @PathVariable - get id from url, which recive from th:action="some url + id"
+    @GetMapping("/update/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    public String getModifyShipmentPage(@PathVariable Integer id, Model model) {
+        Shipment shipment = shipmentService.findById(id);
+        model.addAttribute("shipment", shipment);
+
+        return "/shipments/update";
+    }
+
+    @PostMapping("/update/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    public String modifyShipment(@PathVariable Integer id,
+                                 @ModelAttribute Shipment shipment,
+                                 @RequestParam("photo") MultipartFile photo) throws IOException {
+
+        shipmentService.save(setAdditionFields(shipment,photo));
+        return "redirect:/shipments/list";
+    }
+
+    public Shipment setAdditionFields(Shipment shipment, MultipartFile photo) throws IOException {
+        shipment.setLocalDateTime(shipment.getLocalDateTimeWithFormatter());
         String[] stringsFonUnicueNumber = {
                 shipment.getSenderFullName(),
                 shipment.getSenderEmail(),
@@ -79,6 +118,7 @@ public class ShipmentController {
                 shipment.getRecipientEmail(),
                 shipment.getRecipientPhone(),
                 shipment.getDestination(),
+                shipment.getLocalDateTime()
         };
 
         String inv = shipmentService.generateUniqueNumber(stringsFonUnicueNumber);
@@ -88,71 +128,11 @@ public class ShipmentController {
 
         //compress photo and set
         shipment.setShipmentPhoto(Base64.getEncoder().encodeToString(photo.getBytes()));
-        shipment.setLocalDateTime(shipment.getLocalDateTimeWithFormatter());
 
         Person person = personDetailsService.getCurrentUser();
         shipment.setPerson(person);
-        shipmentService.save(shipment);
-        return "/shipments/new";
+
+        return shipment;
     }
 
-    //-----------------------------------------------------------------------
-
-//    @RequestMapping(value = "/shipment" ,method = RequestMethod.GET, headers = "Accept=application/json", produces =  "application/json" )
-
-//    @GetMapping("/shipment")
-//    public String shipmentnPage(@ModelAttribute("shipment") Shipment person) {
-//        return "shipments/shipment";
-//    }
-////    @RequestMapping(value = "/shipment" ,method = RequestMethod.POST, headers = "Accept=application/json", produces =  "application/json" )
-//
-//    @PostMapping("/shipment")
-//    public String saveShipment(@ModelAttribute("shipment") Shipment shipment) {
-//        // Save the shipment object to the database using Hibernate
-//        shipmentRepository.save(shipment);
-//
-//        // Redirect to the shipment list page
-//        return "redirect:/shipments";
-//    }
-//
-//
-//    // GET a shipment by id
-//    @GetMapping("/{id}")
-//    public String getShipmentById(@PathVariable Integer id, Model model) {
-//        Shipment shipment = shipmentRepository.findById(id)
-//                .orElseThrow(null);
-//        model.addAttribute("shipment", shipment);
-//        return "shipments/view";
-//    }
-//
-//    // POST a new shipment
-//    @PostMapping("")
-//    public String addShipment(@ModelAttribute("shipment") Shipment shipment) {
-//        shipmentRepository.save(shipment);
-//        return "redirect:/shipments";
-//    }
-//
-//    // PUT (update) a shipment
-//    @PutMapping("/{id}")
-//    public String updateShipment(@PathVariable Integer id, @ModelAttribute("shipment") Shipment updatedShipment) {
-//        Shipment shipment = shipmentRepository.findById(id)
-//                .orElseThrow(null);
-//        shipment.setInvoice(updatedShipment.getInvoice());
-//        shipment.setSenderFullName(updatedShipment.getSenderFullName());
-//        shipment.setSenderEmail(updatedShipment.getSenderEmail());
-//        shipment.setSenderPhone(updatedShipment.getSenderPhone());
-//        // set other fields
-//
-//        shipmentRepository.save(shipment);
-//        return "redirect:/shipments/" + id;
-//    }
-//
-//    // DELETE a shipment
-//    @DeleteMapping("/{id}")
-//    public String deleteShipment(@PathVariable Integer id) {
-//        Shipment shipment = shipmentRepository.findById(id)
-//                .orElseThrow(null);
-//        shipmentRepository.delete(shipment);
-//        return "redirect:/shipments";
-//    }
 }

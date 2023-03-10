@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import ua.moisak.PostService.models.Shipment;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ShipmentRepository extends JpaRepository<Shipment, Integer> {
 
@@ -17,8 +18,8 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Integer> {
     @Query("SELECT s FROM Shipment s ORDER BY s.id DESC")
     List<Shipment> findAllInDescOrder();
 
-//    @Modifying
-//    @Query("DELETE FROM Shipment s WHERE s.senderEmail = :email")
-//    int deleteBySenderEmail(@Param("email") String email);
+    void deleteById(Integer id);
+
+//    Optional<Shipment> fingById(Integer id);
 
 }

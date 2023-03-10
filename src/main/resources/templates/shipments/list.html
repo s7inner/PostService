@@ -190,7 +190,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="table-image" th:each="shipment : ${shipments}" style="vertical-align: middle;">
+                                <tr class="table-image" th:each="shipment : ${shipments}"
+                                    style="vertical-align: middle;">
                                     <th scope="row"><img alt=""
                                                          th:src="*{'data:image/jpeg;base64,'+{shipment.shipmentPhoto}}"
                                                          style="width: 100px;height: 100px;"></th>
@@ -199,18 +200,26 @@
                                     <td th:text="${shipment.shipmentPrice}"></td>
                                     <td th:text="${shipment.status}"></td>
                                     <td>
-                                        <a href="/shipments/list">
-                                            <button type="button" class="btn btn-sm btn-primary"><i
-                                                    class="far fa-eye"></i></button>
-                                        </a>
-                                        <a href="/shipments/list">
-                                            <button type="button" class="btn btn-sm btn-success"><i
-                                                    class="fas fa-edit text-white"></i></button>
-                                        </a>
-                                        <a href="/shipments/list">
-                                            <button type="button" class="btn btn-sm btn-danger"><i
-                                                    class="far fa-trash-alt"></i></button>
-                                        </a>
+                                        <div>
+                                            <a href="/shipments/list">
+                                                <button type="button" class="btn btn-sm btn-primary"><i
+                                                        class="far fa-eye"></i></button>
+                                            </a>
+                                        </div>
+
+                                        <div class="pt-1 pb-1" th:if="${shipment.status != 'PENDING' and shipment.status != 'FAILED'}">
+                                            <form method="get" th:action="@{/shipments/update/{id}(id=${shipment.id})}">
+                                                <button type="submit" class="btn btn-sm btn-success"><i
+                                                        class="fas fa-edit text-white"></i></button>
+                                            </form>
+                                        </div>
+                                        <div>
+                                            <form method="post" th:action="@{/shipments/delete}">
+                                                <input type="hidden" name="id" th:value="${shipment.id}"/>
+                                                <button style="width: 33.35px;height: 30.6px;" type="submit" class="btn btn-sm btn-danger"><i
+                                                        class="far fa-trash-alt"></i></button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>

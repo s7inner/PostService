@@ -122,7 +122,7 @@
         </nav>
         <!-- --->
         <div class="container-fluid">
-            <h3 class="text-dark mb-2">Create New Shipment</h3>
+            <h3 class="text-dark mb-2">Modify Shipment</h3>
           <a href="/" class="back-link">
             <i class="fas fa-chevron-left"></i>Back </a>
           <div class="row mb-3">
@@ -134,7 +134,7 @@
                       <p class="text-primary m-0 fw-bold">Shipment Data</p>
                     </div>
                     <div class="card-body">
-                      <form th:action="@{/shipments/new}" th:object="${shipment}" enctype="multipart/form-data" method="post">
+                      <form th:action="@{/shipments/update/{id}(id=${shipment.id})}" th:object="${shipment}" enctype="multipart/form-data" method="post">
                         <div class=" form-row">
                           <h4 class="font-weight-bold text-black">Sender information:</h4>
                         </div>

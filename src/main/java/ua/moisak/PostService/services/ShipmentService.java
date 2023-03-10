@@ -100,29 +100,11 @@ public class ShipmentService {
        return shipmentRepository.findAllInDescOrder();
     }
 
-    // get all shipments for a person
-//    public List<Shipment> getAllShipmentsForPerson(Integer personId) {
-//        Optional<Person> optionalPerson = peopleRepository.findById(personId);
-//        if (optionalPerson.isPresent()) {
-//            Person person = optionalPerson.get();
-//            return person.getShipments();
-//        } else {
-//            throw new IllegalArgumentException("Person with id " + personId + " not found");
-//        }
-//    }
+    public void deleteById(Integer id){
+        shipmentRepository.deleteById(id);
+    }
 
-    // get a shipment by id
-//    public Optional<Shipment> getShipmentById(Integer id) {
-//        return shipmentRepository.findById(id);
-//    }
-//
-//    // update a shipment
-//    public Shipment updateShipment(Shipment shipment) {
-//        return shipmentRepository.save(shipment);
-//    }
-//
-//    // delete a shipment by id
-//    public void deleteShipmentById(Integer id) {
-//        shipmentRepository.deleteById(id);
-//    }
+    public Shipment findById(Integer id){
+        return shipmentRepository.findById(id).orElse(null);
+    }
 }
