@@ -129,8 +129,6 @@ public class ShipmentController {
         };
 
         String inv = shipmentService.generateUniqueNumber(stringsFonUnicueNumber);
-        //set price with service commission of 20%
-        shipment.setShipmentPrice((shipment.getShipmentPrice()*80)/100);
         shipment.setInvoice(inv);
         shipment.setStatus(ShipmentStatus.PENDING);
         shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());

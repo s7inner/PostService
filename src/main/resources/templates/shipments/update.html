@@ -234,6 +234,8 @@
                             <input  type="file" class="form-control-file" id="photo" name="photo" accept="image/png" required>
                           </div>
                         </div>
+                        <input type="hidden" id="distance" readonly="" th:field="*{distance}">
+                        <input type="hidden" id="duration" readonly="" th:field="*{duration}">
                         <div class="form-row mt-3">
                           <div class="form-group">
                             <button class="btn btn-primary" type="submit">Create shipment</button>
@@ -255,7 +257,7 @@
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
           <script src="/assets/js/bs-init.js"></script>
           <script src="/assets/js/theme.js"></script>
-          <script src="/assets/js/autocomplete-script.js"></script>
+          <script src="/assets/js/withoutMap.js"></script>
         </div>
       </div>
     </div>
