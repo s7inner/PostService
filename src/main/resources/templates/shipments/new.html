@@ -123,8 +123,7 @@
         <!-- --->
         <div class="container-fluid">
             <h3 class="text-dark mb-2">Create New Shipment</h3>
-          <a href="/" class="back-link">
-            <i class="fas fa-chevron-left"></i>Back </a>
+
           <div class="row mb-3">
             <div class="col-lg-12">
               <div class="row">
@@ -194,7 +193,7 @@
                         </div>
                         <div class="form-row pb-0">
                           <label for="shipmentShortDescription">Brief information about the shipment that will be displayed in the header:</label>
-                          <input th:field="*{shipmentShortDescription}" type="text" class="form-control" id="shipmentShortDescription" maxlength="255" placeholder="Raw materials, containers with materials for processing" required="required">
+                          <input th:field="*{shipmentShortDescription}" type="text" class="form-control" id="shipmentShortDescription" maxlength="95" placeholder="Raw materials, containers with materials for processing" required="required">
                         </div>
                         <div class="row my-3">
                           <div class="form-group col-md-2">
@@ -216,8 +215,8 @@
                           <div class="form-group col-md-2">
                             <label for="shipmentPackaging">Packaging?</label>
                             <select th:field="*{shipmentPackaging}" id="shipmentPackaging" class="form-control" required="required">
-                              <option value="Yes">i have</option>
-                              <option value="No" selected="">don't have</option>
+                              <option value="Own Packaging">Own</option>
+                              <option value="Need Packaging" selected="">Need</option>
                             </select>
                           </div>
                           <div class="form-group col-md-2">
@@ -236,6 +235,10 @@
                           </div>
                         </div>
                         <div class="form-row mt-3">
+<!--                          <input type="hidden"  id="origin" th:value="${shipment.origin}">-->
+<!--                          <input type="hidden" id="destination" th:value="${shipment.destination}">-->
+                          <input type="hidden" id="distance" readonly="" th:field="*{distance}">
+                          <input type="hidden" id="duration" readonly="" th:field="*{duration}">
                           <div class="form-group">
                             <button class="btn btn-primary" type="submit">Create shipment</button>
                           </div>
@@ -256,7 +259,8 @@
           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
           <script src="/assets/js/bs-init.js"></script>
           <script src="/assets/js/theme.js"></script>
-          <script src="/assets/js/autocomplete-script.js"></script>
+<!--          <script src="/assets/js/autocomplete-script.js"></script>-->
+          <script src="/assets/js/newPage_autowired_distance_duration.js"></script>
         </div>
       </div>
     </div>

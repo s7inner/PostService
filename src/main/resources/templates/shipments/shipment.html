@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -11,35 +10,33 @@
   <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&amp;libraries=places,geometry&amp;key=AIzaSyBLib7H7_zrXbst6Ln_lV9yU12zxsT_J2M"></script>
 </head>
 
-<body id="page-top">
+<body id="page-top" class="">
   <div id="wrapper">
     <!-- -->
     <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
       <div class="container-fluid d-flex flex-column p-0">
         <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-        <div class="sidebar-brand-text mx-3">
-          <span>PostService</span>
-
-        </div>
-      </a>
+          <div class="sidebar-brand-text mx-3">
+            <span>PostService</span>
+          </div>
+        </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
           <li class="nav-item"><a class="nav-link" href="/"><span>Home</span></a></li>
           <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="#"><span>REST API</span></a></li>
           <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Profile</span>
+              <span>Profile</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
               <a class="dropdown-item" href="/profile">My Profile</a>
               <a class="dropdown-item" href="/changeCredentials">Change Credentials</a>
             </div>
           </li>
-
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''ADMIN'')')}" >
+          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Admin</span>
+              <span>Admin</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
               <a class="dropdown-item" href="#">Validate performers</a>
@@ -49,7 +46,7 @@
           <!-- --->
           <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''EMPLOYER'') or hasRole(''ADMIN'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Employer</span>
+              <span>Employer</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
               <a class="dropdown-item" href="/shipments/new">Create a new shipment</a>
@@ -57,10 +54,9 @@
             </div>
           </li>
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ADMIN'')')}"
-          >
+          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ADMIN'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Performer</span>
+              <span>Performer</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
               <a class="dropdown-item" href="/shipments/list">Taken shipments</a>
@@ -72,8 +68,8 @@
           <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" href="/auth/registration"><span>Register</span></a></li>
           <li class="nav-item" sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post" class="logout-form">
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-              <a class="nav-link" >
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+              <a class="nav-link">
                 <button type="submit" sec:authorize="isAuthenticated()">Logout</button>
               </a>
             </form>
@@ -111,7 +107,7 @@
                     <a class="dropdown-item" href="/auth/login" sec:authorize="!isAuthenticated()">Login</a>
                     <a class="dropdown-item" href="/auth/registration" sec:authorize="!isAuthenticated()">Register</a>
                     <form th:action="@{/logout}" method="post" class="logout-form">
-                      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                       <button type="submit" class="dropdown-item" sec:authorize="isAuthenticated()">Logout</button>
                     </form>
                   </div>
@@ -122,38 +118,124 @@
         </nav>
         <!-- --->
         <div class="container-fluid">
-          <h3 class="text-dark mb-2">Profile</h3>
-
+          <div style="display: flex;
+			justify-content: space-between;">
+            <h3 class="text-dark mb-2">Shipment Information</h3>
+            <h3 class="text-dark mb-2" style="text-align: right;" th:text="${shipment.invoice}"></h3>
+          </div>
           <div class="row mb-3">
             <div class="col-lg-12">
-
               <div class="row">
                 <div class="col">
                   <div class="card shadow mb-3">
-                    <div class="card-header py-3">
-                      <p class="text-primary m-0 fw-bold">User Settings</p>
+                    <div class="card-header py-2 pt-2" style="background-color: #4E73DF;">
+                      <div class="m-0 fw-bold text-center text-light">
+                        <h4 class="pi-draggable pt-1">A shipment is a physical package or container that contains goods or products products products</h4>
+                      </div>
                     </div>
                     <div class="card-body">
-<!--                      <form th:action="@{/profile}" method="post">-->
-                        <form th:action="@{/profile}" th:object="${profile}" method="post">
-                        <div class="row">
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Full Name</strong></label><input class="form-control" type="text" id="fullName" placeholder="Peter Jone White"  required="" name="fullName" th:field="*{fullName}" ></div>
-                          </div>
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="peter@example.com" required="" name="email" readonly th:field="*{email}"></div>
-                          </div>
+                      <div class="row ">
+                        <div class="col-md-5"><img class="img-fluid shadow rounded" th:src="*{'data:image/jpeg;base64,'+{shipment.shipmentPhoto}}" style="width: 500px;height: 400px;"></div>
+                        <div class="col-md-7">
+                          <table class="table table-striped table-bordered" style=" height: 400px;">
+                            <tbody>
+                              <tr>
+                                <th>Price:</th>
+                                <td th:text="${shipment.shipmentPrice + '$'}"></td>
+                              </tr>
+                              <tr>
+                                <th>Weight:</th>
+                                <td th:text="${shipment.shipmentWeight + ' kg'}"></td>
+                              </tr>
+                              <tr>
+                                <th>Volumetric Weight:</th>
+                                <td th:text="${shipment.weightVolumetric + ' kg/m³'}"></td>
+                              </tr>
+                              <tr>
+                                <th>Packing:</th>
+                                <td th:text="${shipment.shipmentPackaging}"></td>
+                              </tr>
+                              <tr>
+                                <th>Dimensions(L×W×H):</th>
+                                <td th:text="${shipment.shipmentLength} + '×' + ${shipment.shipmentWidth} + '×' + ${shipment.shipmentHeight}"></td>
+                              </tr>
+                              <tr>
+                                <th>Loading Date:</th>
+                                <td th:text="${shipment.loadingDate}"></td>
+                              </tr>
+                              <tr>
+                                <th>Uploading Date:</th>
+                                <td th:text="${shipment.unloadingDate}"></td>
+                              </tr>
+                              <tr>
+                                <th>Loading Address:</th>
+                                <input type="hidden"  id="origin" th:value="${shipment.origin}">
+                                <td th:text="${shipment.origin}"></td>
+                              </tr>
+                              <tr>
+                                <th>Uploading Address:</th>
+                                <input type="hidden" id="destination" th:value="${shipment.destination}">
+                                <td th:text="${shipment.destination}"></td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
-                        <div class="row">
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Phone Number</strong></label><input class="form-control" type="text" id="phone" placeholder="+380000000000" name="phone" required="" th:field="*{phone}"></div>
-                          </div>
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Address</strong></label><input class="form-control" type="text" id="address" placeholder="вулиця Лукаша, 5, Львів, Львівська область, Україна" name="address" required="" th:field="*{address}"></div>
-                          </div>
-                        </div>
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
-                      </form>
+                      </div>
+                    </div>
+                    <div class="card-header py-2 pt-2" style="background-color: #4E73DF;">
+                      <div class="m-0 fw-bold text-center text-light">
+                        <h4 class="pi-draggable pt-1">Contact Information</h4>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row ">
+                        <table class="table table-striped table-bordered">
+                          <tbody>
+                          <tr>
+                            <th></th>
+                            <td>Full Name</td>
+                            <td>Phone</td>
+                            <td>Email</td>
+                          </tr>
+                          <tr>
+                            <th>Sender</th>
+                            <td th:text="${shipment.senderFullName}"></td>
+                            <td th:text="${shipment.senderPhone}"></td>
+                            <td th:text="${shipment.senderEmail}"></td>
+                          </tr>
+                          <tr>
+                            <th>Recipient</th>
+                            <td th:text="${shipment.recipientFullName}"></td>
+                            <td th:text="${shipment.recipientPhone}"></td>
+                            <td th:text="${shipment.recipientEmail}"></td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="card-header py-2 pt-2" style="background-color: #4E73DF;">
+                      <div class="m-0 fw-bold text-center text-light">
+                        <h4 class="pi-draggable pt-1">The route from the place of loading to the place of unloading</h4>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                      <div class="row ">
+                        <table class="table table-striped table-bordered">
+                          <tbody>
+                            <tr>
+                              <th>Distance:</th>
+                              <td th:text="${shipment.distance}">km</td>
+                            </tr>
+                            <tr>
+                              <th>Travel Time By Car:</th>
+                              <td th:text="${shipment.duration}"></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <input type="hidden" id="distance" name="distance"></input>
+                        <input type="hidden" id="duration" name="duration"></input>
+                        <div id="map" style="height: 500px;"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -163,17 +245,16 @@
                   <div class="text-center my-auto copyright"><span>POSTSERVICE 2023</span></div>
                 </div>
               </footer>
-            </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: none;"><i class="fas fa-angle-up"></i></a>
+            </div><a class="border rounded d-inline scroll-to-top" href="#page-top" style="display: block;"><i class="fas fa-angle-up"></i></a>
           </div>
-
         </div>
       </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/assets/js/bs-init.js"></script>
   <script src="/assets/js/theme.js"></script>
+  <script src="/assets/js/distance_and_duration.js"></script>
 </body>
 
 </html>

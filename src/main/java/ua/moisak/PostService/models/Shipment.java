@@ -91,6 +91,12 @@ public class Shipment {
     @Enumerated(EnumType.STRING)
     private ShipmentStatus status;
 
+    @Column(name = "distance", nullable = false)
+    private String distance;
+
+    @Column(name = "duration", nullable = false)
+    private String duration;
+
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
     private Person person;

@@ -44,6 +44,13 @@ public class ShipmentController {
         return "shipments/list";
     }
 
+    @GetMapping("/{id}")
+    public String getShipmentById(@PathVariable Integer id, Model model) {
+        Shipment shipment = shipmentService.findById(id);
+        model.addAttribute("shipment", shipment);
+        return "/shipments/shipment";
+    }
+
     // Creating new Shipment--------------------------------------------------
     @Transactional
     @GetMapping("/new")
@@ -122,6 +129,8 @@ public class ShipmentController {
         };
 
         String inv = shipmentService.generateUniqueNumber(stringsFonUnicueNumber);
+        //set price with service commission of 20%
+        shipment.setShipmentPrice((shipment.getShipmentPrice()*80)/100);
         shipment.setInvoice(inv);
         shipment.setStatus(ShipmentStatus.PENDING);
         shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());
