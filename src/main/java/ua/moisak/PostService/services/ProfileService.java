@@ -4,10 +4,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.models.Profile;
+import ua.moisak.PostService.models.Shipment;
 import ua.moisak.PostService.repositories.PeopleRepository;
 import ua.moisak.PostService.repositories.ProfileRepository;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,6 +47,17 @@ public class ProfileService {
         profileRepository.updateSenderEmail(person.getUsername(), person.getId());
     }
 
+    public List<Profile> findAll() {
+        return  profileRepository.findAll();
+    }
+
+    public Profile findById(Integer id){
+        return profileRepository.findById(id).orElse(null);
+    }
+
+    public void save(Profile profile) {
+        profileRepository.save(profile);
+    }
 
 }
 

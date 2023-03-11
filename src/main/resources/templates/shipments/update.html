@@ -26,7 +26,8 @@
         <ul class="navbar-nav text-light" id="accordionSidebar">
           <li class="nav-item"><a class="nav-link" href="/"><span>Home</span></a></li>
           <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="#"><span>REST API</span></a></li>
-          <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+
+          <li class="nav-item dropdown" sec:authorize="isAuthenticated()" th:if="${not #authorization.expression('hasRole(''ADMIN'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
               <span >Profile</span>
             </a>
@@ -37,17 +38,17 @@
           </li>
 
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''ADMIN'')')}" >
+          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''ONLY_FOR_VIEW'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
               <span >Admin</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-              <a class="dropdown-item" href="#">Validate performers</a>
-              <a class="dropdown-item" href="#">Shipments statistic</a>
+              <a class="dropdown-item" href="/admin/list">Validate performers</a>
+              <a class="dropdown-item" href="/admin/statistic">Shipments statistic</a>
             </div>
           </li>
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''EMPLOYER'') or hasRole(''ADMIN'')')}">
+          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''EMPLOYER'') or hasRole(''ONLY_FOR_VIEW'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
               <span >Employer</span>
             </a>
@@ -57,14 +58,14 @@
             </div>
           </li>
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ADMIN'')')}"
+          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ONLY_FOR_VIEW'')')}"
           >
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
               <span >Performer</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-              <a class="dropdown-item" href="#">Taken shipments</a>
-              <a class="dropdown-item" href="#">Take new shipment</a>
+              <a class="dropdown-item" href="/shipments/list">Taken shipments</a>
+              <a class="dropdown-item" href="/shipments/list">Take new shipment</a>
             </div>
           </li>
           <!-- --->
@@ -105,7 +106,7 @@
                     <span class="d-none d-lg-inline me-2 text-gray-600" sec:authentication="name"></span>
                   </a>
                   <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                    <a class="dropdown-item" href="/profile" sec:authorize="isAuthenticated()">Profile</a>
+                    <a class="dropdown-item" href="/profile" sec:authorize="isAuthenticated()" th:if="${not #authorization.expression('hasRole(''ADMIN'')')}">Profile</a>
                     <a class="dropdown-item" href="/changeCredentials" sec:authorize="isAuthenticated()">Change Credentials</a>
                     <div class="dropdown-divider" sec:authorize="isAuthenticated()"></div>
                     <a class="dropdown-item" href="/auth/login" sec:authorize="!isAuthenticated()">Login</a>
