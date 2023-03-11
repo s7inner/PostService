@@ -1,6 +1,7 @@
 package ua.moisak.PostService.controllers;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -8,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import ua.moisak.PostService.enums.PerformerProfileStatus;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.models.Profile;
 import ua.moisak.PostService.services.PersonDetailsService;
@@ -60,19 +62,19 @@ public class HomeController {
         String[] passwords = personDetailsService.getListFromString(person.getPassword());
 
         // nothing to entered
-        if(person.getUsername()==null && person.getPassword()==null){
+        if (person.getUsername() == null && person.getPassword() == null) {
             return "home/changeCredentials";
         }
 
         // check if current password entered
-        if(passwords[0].length()>0){
+        if (passwords[0].length() > 0) {
             boolean enteredAndCurrentPasswordsMath = registrationService.matches(passwords[0], currentUser.getPassword());
 
             // if matches passwords to enable change credentials
-            if(enteredAndCurrentPasswordsMath){
+            if (enteredAndCurrentPasswordsMath) {
 
                 //change login, check if login entered
-                if(person.getUsername()!=null&&passwords.length==1) {
+                if (person.getUsername() != null && passwords.length == 1) {
                     //check if user exist with this username
                     if (personDetailsService.findByUsername(person.getUsername()) == null) {
                         //set entered email from form
@@ -86,17 +88,17 @@ public class HomeController {
                     }
                 }
                 //change password, check if password entered
-                else if(person.getUsername().equals("")&&passwords.length==3){
+                else if (person.getUsername().equals("") && passwords.length == 3) {
 
                     //check if newPassword and confirmPassword equal
-                    if(passwords[1].equals(passwords[2])){
+                    if (passwords[1].equals(passwords[2])) {
                         currentUser.setPassword(registrationService.encodePassword(passwords[2]));
                         personDetailsService.save(currentUser);
 
                         return "redirect:/auth/login";
                     }
 
-                }else if(!person.getUsername().equals("")&&passwords.length==3){
+                } else if (!person.getUsername().equals("") && passwords.length == 3) {
                     if (personDetailsService.findByUsername(person.getUsername()) == null && passwords[1].equals(passwords[2])) {
                         //changing login and password
                         currentUser.setUsername(person.getUsername());
@@ -114,13 +116,22 @@ public class HomeController {
         return "home/changeCredentials";
     }
 
-    @Transactional // add
+    //    @Transactional // add
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
     public String getProfile(Model model) {
         Person person = personDetailsService.getCurrentUser();
+        //if Profile dont exist
         if (person.getProfile() == null) {
-            model.addAttribute("profile", new Profile(person.getUsername()));
+            Profile profile = new Profile();
+
+            //if its Performer user -> set status Validation
+            if (person.getRole().equals("ROLE_PERFORMER")) {
+                profile.setStatus(PerformerProfileStatus.NOT_VALIDATED);
+            }
+            profile.setEmail(person.getUsername());
+
+            model.addAttribute("profile", profile);
         } else {
             model.addAttribute("profile", person.getProfile());
         }

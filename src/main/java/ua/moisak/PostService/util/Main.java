@@ -8,32 +8,27 @@ public class Main {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
 
-        System.out.println("encoder:  " + encoder.encode("abel"));
         System.out.println("encoder:  " + encoder.encode("admin"));
+        System.out.println("encoder:  " + encoder.encode("onlyForView"));
 
-        String encode1 = encoder.encode("user300");
-        String encode2 = encoder2.encode("user300");
+//        String encode1 = encoder.encode("user300");
+//        String encode2 = encoder2.encode("user300");
+//
+//        System.out.println("user300 - 1 " + encode1);
+//        System.out.println("user300 - 2 " + encode2);
 
-        System.out.println("user300 - 1 " + encode1);
-        System.out.println("user300 - 2 " + encode2);
-
-        boolean result = encoder2.matches("user300", encode1);
-        System.out.println("result " + result);
+//        boolean result = encoder2.matches("user300", encode1);
+//        System.out.println("result " + result);
 
 
 
-        if (encoder.matches("abel", "$2a$10$IAz6WzJ314LH1NXq7Rf.dOYPP2uvzk08g.eAl9l4DRG4YsxavEV4W")) {
+        if (encoder.matches("admin", "$2a$10$xsEoIz3CzP13yf6L631TUOdqh2rn/Q8FoKI3uxWJk2jHN/IZyVhtS")) {
             System.out.println("encoder: true");
         }
 
-
-//        System.out.println("------------华丽的分割线-----------------------");
-//        String Md5Password = MD5Util.encode("abel");
-//        System.out.println("Md5Password:  " + Md5Password);
-//        System.out.println("encoder:  " + encoder.encode(Md5Password));
-//        if (encoder.matches(Md5Password, "$2a$10$37MXEfzlbtC6QSsRTlRhIOmykMRJtO5mU8Y.yiJBjy1x4WYWFR5gG")) {
-//            System.out.println("Md5Password: true");
-//        }
+        if (encoder.matches("admin", "$2a$10$T7UyAAXFk95SeEhAhzz9f.bobHGS1uWPSEmgrutSU3pVVjco90yAW")) {
+            System.out.println("encoder: true");
+        }
 
     }
 
