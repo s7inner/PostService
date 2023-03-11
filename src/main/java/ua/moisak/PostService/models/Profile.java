@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
+import ua.moisak.PostService.enums.PerformerProfileStatus;
+import ua.moisak.PostService.enums.ShipmentStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -37,7 +39,17 @@ public class Profile {
     @Column(nullable = false, name = "address")
     private String address;
 
-    //    @OneToOne(fetch = FetchType.EAGER)
+    //---------------Fields only for Persormer
+    @Column(name = "car_license_plate")
+    private String carLicensePlate;
+
+    @Column(name = "car_model")
+    private String carModel;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private PerformerProfileStatus status;
+    //-----------------------------------------
     @OneToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
