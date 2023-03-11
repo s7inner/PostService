@@ -11,7 +11,8 @@ CREATE TABLE Person
 );
 
 INSERT INTO Person (username, password, role)
-VALUES ('admin@gmail.com', '$2a$10$xsEoIz3CzP13yf6L631TUOdqh2rn/Q8FoKI3uxWJk2jHN/IZyVhtS', 'ROLE_ADMIN');
+VALUES ('admin@gmail.com', '$2a$10$xsEoIz3CzP13yf6L631TUOdqh2rn/Q8FoKI3uxWJk2jHN/IZyVhtS', 'ROLE_ADMIN'),
+       ('onlyForView@gmail.com', '$2a$10$SYZjfy9jn6r4zKqgr3GrxuZVU9EbsG8X0us1a71BK4Zy14CjT7066', 'ROLE_ONLY_FOR_VIEW');
 
 CREATE TABLE profile
 (
@@ -22,7 +23,7 @@ CREATE TABLE profile
     address           VARCHAR(100) NOT NULL,
     car_license_plate VARCHAR(100),
     car_model         VARCHAR(100),
-    status         VARCHAR(100),
+    status            VARCHAR(100),
     person_id         INTEGER      NOT NULL,
     FOREIGN KEY (person_id) REFERENCES person (id)
 );
