@@ -47,6 +47,7 @@ public class ShipmentController {
     }
 
     //GET Shipment by ID
+
     @GetMapping("/employer/{id}")
     public String getShipmentById(@PathVariable Integer id, Model model) {
         Shipment shipment = shipmentService.findById(id);
@@ -132,4 +133,7 @@ public class ShipmentController {
         model.addAttribute("shipments", shipments);
         return "/shipments/performer/list";
     }
-}
+    }
+    //---------------------------------------------------------------------------------------------------
+
+
