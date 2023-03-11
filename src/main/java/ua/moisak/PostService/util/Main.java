@@ -9,6 +9,8 @@ public class Main {
         BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
 
         System.out.println("encoder:  " + encoder.encode("admin"));
+        System.out.println("encoder:  " + encoder.encode("admin"));
+
         System.out.println("encoder:  " + encoder.encode("onlyForView"));
 
 //        String encode1 = encoder.encode("user300");
@@ -22,11 +24,11 @@ public class Main {
 
 
 
-        if (encoder.matches("admin", "$2a$10$xsEoIz3CzP13yf6L631TUOdqh2rn/Q8FoKI3uxWJk2jHN/IZyVhtS")) {
+        if (encoder.matches("admin", "$2a$10$MHXPpH6Q.RTDwMkoc1khB.07zxAnzcrnK3eAytkb.wTNAAvifMaNW")) {
             System.out.println("encoder: true");
         }
 
-        if (encoder.matches("admin", "$2a$10$T7UyAAXFk95SeEhAhzz9f.bobHGS1uWPSEmgrutSU3pVVjco90yAW")) {
+        if (encoder.matches("admin", "$2a$10$Src5grEycLX5m7PJp0B8YupSTaIM5t3tC7Xknl/Hvf9/V6F.wtXnm")) {
             System.out.println("encoder: true");
         }
 

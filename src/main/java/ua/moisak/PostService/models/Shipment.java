@@ -106,13 +106,6 @@ public class Shipment {
 
     }
 
-    public String getLocalDateTimeWithFormatter() {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
-        LocalDateTime localDateTime = LocalDateTime.now();
-        String formattedDate = localDateTime.format(format);
-        return formattedDate;
-    }
-
     public Integer calculateWeightVolumetric() {
         return (shipmentLength * shipmentWidth * shipmentHeight) / 4000;
     }

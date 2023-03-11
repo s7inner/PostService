@@ -16,6 +16,7 @@ import ua.moisak.PostService.services.PersonDetailsService;
 import ua.moisak.PostService.services.ProfileService;
 import ua.moisak.PostService.services.RegistrationService;
 import ua.moisak.PostService.services.ShipmentService;
+import ua.moisak.PostService.util.LocalDataTimeUtil;
 import ua.moisak.PostService.util.PersonValidator;
 
 import javax.validation.Valid;
@@ -116,10 +117,37 @@ public class HomeController {
         return "home/changeCredentials";
     }
 
-    //    @Transactional // add
-    @GetMapping("/profile")
+
+    //FOR EMPLOYER-----------------------------------------------------------
+    @GetMapping("/employer/profile")
     @PreAuthorize("isAuthenticated()")
-    public String getProfile(Model model) {
+    public String getProfileEmployer(Model model) {
+        Person person = personDetailsService.getCurrentUser();
+        //if Profile dont exist
+        if (person.getProfile() == null) {
+            Profile profile = new Profile();
+            profile.setEmail(person.getUsername());
+
+            model.addAttribute("profile", profile);
+        } else {
+            model.addAttribute("profile", person.getProfile());
+        }
+        return "home/employer/profile";
+    }
+
+    @PostMapping("/employer/profile")
+    @PreAuthorize("isAuthenticated()")
+    public String postProfileEmployer(@ModelAttribute("profile") Profile profile) {
+        profileService.createProfile(profile);
+        return "home/employer/profile";
+
+    }
+
+    //FOR PERFORMER-----------------------------------------------------------
+
+    @GetMapping("/performer/profile")
+    @PreAuthorize("isAuthenticated()")
+    public String getProfilePerformer(Model model) {
         Person person = personDetailsService.getCurrentUser();
         //if Profile dont exist
         if (person.getProfile() == null) {
@@ -135,15 +163,14 @@ public class HomeController {
         } else {
             model.addAttribute("profile", person.getProfile());
         }
-
-        return "/home/profile";
+        return "home/performer/profile";
     }
 
-    @PostMapping("/profile")
+    @PostMapping("/performer/profile")
     @PreAuthorize("isAuthenticated()")
-    public String postProfile(@ModelAttribute("profile") Profile profile) {
+    public String postProfilePerformer(@ModelAttribute("profile") Profile profile) {
         profileService.createProfile(profile);
-        return "/home/profile";
+        return "home/performer/profile";
 
     }
 

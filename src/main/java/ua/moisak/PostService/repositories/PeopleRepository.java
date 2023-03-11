@@ -12,13 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface PeopleRepository extends JpaRepository<Person, Integer> {
-    Optional<Person> findByUsername(String username);
-
     Optional<Person> findById(Integer id);
 
-    void deleteByUsername(String username);
-
-    @Modifying
-    @Query("UPDATE Person p SET p.username = :newEmail WHERE p.username = :oldEmail")
-    void updateEmail(@Param("oldEmail") String oldEmail, @Param("newEmail") String newEmail);
+    Optional<Person> findByUsername(String username);
 }
