@@ -14,15 +14,13 @@ import ua.moisak.PostService.repositories.ShipmentRepository;
 import ua.moisak.PostService.services.PersonDetailsService;
 import ua.moisak.PostService.services.ShipmentService;
 import ua.moisak.PostService.util.ImageUtil;
+import ua.moisak.PostService.util.LocalDataTimeUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/shipments")
@@ -36,25 +34,30 @@ public class ShipmentController {
         this.personDetailsService = personDetailsService;
     }
 
+    //FOR EMPLOYER---------------------------------------------------------------------------------------
+
     // GET all shipments
-    @GetMapping("list")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
+    @GetMapping("/employer/list")
     public String getAllShipments(Model model) {
-        List<Shipment> shipments = shipmentService.findAllInDescOrder();
+        List<Shipment> shipments = shipmentService.findAllInDescOrderForCurrentPerson(personDetailsService.getCurrentUser().getId());
         model.addAttribute("shipments", shipments);
-        return "shipments/list";
+        return "/shipments/employer/list";
     }
 
-    @GetMapping("/{id}")
+    //GET Shipment by ID
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
+    @GetMapping("/employer/{id}")
     public String getShipmentById(@PathVariable Integer id, Model model) {
         Shipment shipment = shipmentService.findById(id);
         model.addAttribute("shipment", shipment);
-        return "/shipments/shipment";
+        return "/shipments/employer/shipment";
     }
 
-    // Creating new Shipment--------------------------------------------------
+    // GET Shipment for creating new
     @Transactional
-    @GetMapping("/new")
-    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    @GetMapping("/employer/new")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     public String showNewShipmentForm(Model model) {
         Person person = personDetailsService.getCurrentUser();
         Profile profile = person.getProfile();
@@ -72,74 +75,46 @@ public class ShipmentController {
             shipment.setSenderEmail(person.getUsername());
             model.addAttribute("shipment",shipment);
         }
-        return "/shipments/new";
+        return "/shipments/employer/new";
     }
-
-    @PostMapping("/new")
-    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    // POST Shipment for creating new
+    @PostMapping("/employer/new")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     public String createNewShipment(@ModelAttribute("shipment") Shipment shipment,
                                     @RequestParam("photo") MultipartFile photo) throws IOException {
 
-        shipmentService.save(setAdditionFields(shipment,photo));
-        return "/shipments/new";
+        shipmentService.save(shipmentService.setAdditionFields(shipment,photo));
+        return "/shipments/employer/new";
     }
 
     //DELETE shipment by id using @RequestParam - get object from model with attribute name = "", with value id
 
-    @PostMapping("/delete")
-    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    @PostMapping("/employer/delete")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     public String deleteShipment(@RequestParam("id") Integer id) {
         shipmentService.deleteById(id);
-        return "redirect:/shipments/list";
+        return "redirect:/shipments/employer/list";
     }
 
     //UPDATE shipment by id using @PathVariable - get id from url, which recive from th:action="some url + id"
-    @GetMapping("/update/{id}")
-    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    @GetMapping("/employer/update/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     public String getModifyShipmentPage(@PathVariable Integer id, Model model) {
         Shipment shipment = shipmentService.findById(id);
         model.addAttribute("shipment", shipment);
 
-        return "/shipments/update";
+        return "/shipments/employer/update";
     }
 
-    @PostMapping("/update/{id}")
-    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
+    @PostMapping("/employer/update/{id}")
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     public String modifyShipment(@PathVariable Integer id,
                                  @ModelAttribute Shipment shipment,
                                  @RequestParam("photo") MultipartFile photo) throws IOException {
 
-        shipmentService.save(setAdditionFields(shipment,photo));
-        return "redirect:/shipments/list";
+        shipmentService.save(shipmentService.setAdditionFields(shipment,photo));
+        return "redirect:/shipments/employer/list";
     }
-
-    public Shipment setAdditionFields(Shipment shipment, MultipartFile photo) throws IOException {
-        shipment.setLocalDateTime(shipment.getLocalDateTimeWithFormatter());
-        String[] stringsFonUnicueNumber = {
-                shipment.getSenderFullName(),
-                shipment.getSenderEmail(),
-                shipment.getSenderPhone(),
-                shipment.getOrigin(),
-
-                shipment.getRecipientFullName(),
-                shipment.getRecipientEmail(),
-                shipment.getRecipientPhone(),
-                shipment.getDestination(),
-                shipment.getLocalDateTime()
-        };
-
-        String inv = shipmentService.generateUniqueNumber(stringsFonUnicueNumber);
-        shipment.setInvoice(inv);
-        shipment.setStatus(ShipmentStatus.PENDING);
-        shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());
-
-        //compress photo and set
-        shipment.setShipmentPhoto(Base64.getEncoder().encodeToString(photo.getBytes()));
-
-        Person person = personDetailsService.getCurrentUser();
-        shipment.setPerson(person);
-
-        return shipment;
-    }
+    //---------------------------------------------------------------------------------------------------
 
 }

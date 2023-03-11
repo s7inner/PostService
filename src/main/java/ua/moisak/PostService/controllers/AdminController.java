@@ -26,13 +26,15 @@ public class AdminController {
         this.profileService = profileService;
     }
 
-    // GET all shipments
+    @PreAuthorize("hasAnyRole('ONLY_FOR_VIEW', 'ADMIN')")
+
     @GetMapping("list")
-    public String getAllShipments(Model model) {
-        List<Profile> profiles = profileService.findAll();
+    public String getAllProfiles(Model model) {
+        List<Profile> profiles = profileService.findAllByDecOrderForPerformers();
         model.addAttribute("profiles", profiles);
         return "admin/listForValidation";
     }
+    @PreAuthorize("hasAnyRole('ONLY_FOR_VIEW', 'ADMIN')")
 
     @GetMapping("/{id}")
     public String getProfiletById(@PathVariable Integer id, Model model) {
@@ -40,6 +42,7 @@ public class AdminController {
         model.addAttribute("profile", profile);
         return "admin/pagePerformer";
     }
+    @PreAuthorize("hasAnyRole('ONLY_FOR_VIEW', 'ADMIN')")
 
     @PostMapping("/validate/{id}")
     public String validateProfile(@PathVariable Integer id) {
@@ -56,92 +59,4 @@ public class AdminController {
         }
         return "redirect:/admin/list";
     }
-
-
-
-//    // Creating new Shipment--------------------------------------------------
-//    @Transactional
-//    @GetMapping("/new")
-//    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
-//    public String showNewShipmentForm(Model model) {
-//        Person person = personDetailsService.getCurrentUser();
-//        Profile profile = person.getProfile();
-//
-//        //Якщо немає створених Shipments, для заповнення даними форми, зтягуємо дані з профілю
-//        //Якщо є, стягуємо останнє відправлення й заповнюємо ним форму
-//        Shipment shipment = new Shipment();
-//        if(person.shipmentsIsEmpty()&&profile!=null){
-//            shipment = shipmentService.getShipmentForGetMappingFillProfileData(profile);
-//
-//            model.addAttribute("shipment",shipment);
-//        }else if(!person.shipmentsIsEmpty()) {
-//            model.addAttribute("shipment", shipmentService.findLastShipment());
-//        }else {
-//            shipment.setSenderEmail(person.getUsername());
-//            model.addAttribute("shipment",shipment);
-//        }
-//        return "/shipments/new";
-//    }
-//
-//    @PostMapping("/new")
-//    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
-//    public String createNewShipment(@ModelAttribute("shipment") Shipment shipment,
-//                                    @RequestParam("photo") MultipartFile photo) throws IOException {
-//
-//        shipmentService.save(setAdditionFields(shipment,photo));
-//        return "/shipments/new";
-//    }
-//
-//    //DELETE shipment by id using @RequestParam - get object from model with attribute name = "", with value id
-
-
-    //UPDATE shipment by id using @PathVariable - get id from url, which recive from th:action="some url + id"
-//    @GetMapping("/update/{id}")
-//    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
-//    public String getModifyShipmentPage(@PathVariable Integer id, Model model) {
-//        Shipment shipment = shipmentService.findById(id);
-//        model.addAttribute("shipment", shipment);
-//
-//        return "/shipments/update";
-//    }
-//
-//    @PostMapping("/update/{id}")
-//    @PreAuthorize("hasAnyRole('EMPLOYER', 'ADMIN')")
-//    public String modifyShipment(@PathVariable Integer id,
-//                                 @ModelAttribute Shipment shipment,
-//                                 @RequestParam("photo") MultipartFile photo) throws IOException {
-//
-//        shipmentService.save(setAdditionFields(shipment,photo));
-//        return "redirect:/shipments/list";
-//    }
-
-//    public Shipment setAdditionFields(Shipment shipment, MultipartFile photo) throws IOException {
-//        shipment.setLocalDateTime(shipment.getLocalDateTimeWithFormatter());
-//        String[] stringsFonUnicueNumber = {
-//                shipment.getSenderFullName(),
-//                shipment.getSenderEmail(),
-//                shipment.getSenderPhone(),
-//                shipment.getOrigin(),
-//
-//                shipment.getRecipientFullName(),
-//                shipment.getRecipientEmail(),
-//                shipment.getRecipientPhone(),
-//                shipment.getDestination(),
-//                shipment.getLocalDateTime()
-//        };
-//
-//        String inv = shipmentService.generateUniqueNumber(stringsFonUnicueNumber);
-//        shipment.setInvoice(inv);
-//        shipment.setStatus(ShipmentStatus.PENDING);
-//        shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());
-//
-//        //compress photo and set
-//        shipment.setShipmentPhoto(Base64.getEncoder().encodeToString(photo.getBytes()));
-//
-//        Person person = personDetailsService.getCurrentUser();
-//        shipment.setPerson(person);
-//
-//        return shipment;
-//    }
-
 }

@@ -17,30 +17,39 @@
     <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
       <div class="container-fluid d-flex flex-column p-0">
         <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
-        <div class="sidebar-brand-text mx-3">
-          <span>PostService</span>
-
-        </div>
-      </a>
+          <div class="sidebar-brand-text mx-3">
+            <span>PostService</span>
+          </div>
+        </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
           <li class="nav-item"><a class="nav-link" href="/"><span>Home</span></a></li>
-          <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link" href="#"><span>REST API</span></a></li>
+          <li class="nav-item" sec:authorize="isAuthenticated()"><a class="nav-link"
+                                                                    href="#"><span>REST API</span></a></li>
 
-          <li class="nav-item dropdown" sec:authorize="isAuthenticated()" th:if="${not #authorization.expression('hasRole(''ADMIN'')')}">
+          <li class="nav-item dropdown" sec:authorize="isAuthenticated()"
+              th:if="${not #authorization.expression('hasRole(''ADMIN'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Profile</span>
+              <span>Profile</span>
             </a>
-            <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-              <a class="dropdown-item" href="/profile">My Profile</a>
+            <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"
+                 th:if="${#authorization.expression('hasRole(''EMPLOYER'')')}">
+              <a class="dropdown-item" href="/employer/profile">My Profile</a>
+              <a class="dropdown-item" href="/changeCredentials">Change Credentials</a>
+            </div>
+
+            <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"
+                 th:if="${#authorization.expression('hasRole(''PERFORMER'')')}">
+              <a class="dropdown-item" href="/performer/profile">My Profile</a>
               <a class="dropdown-item" href="/changeCredentials">Change Credentials</a>
             </div>
           </li>
 
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''ONLY_FOR_VIEW'')')}">
+          <li class="nav-item dropdown"
+              th:if="${#authorization.expression('hasRole(''ADMIN'') or hasRole(''ONLY_FOR_VIEW'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Admin</span>
+              <span>Admin</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
               <a class="dropdown-item" href="/admin/list">Validate performers</a>
@@ -48,72 +57,104 @@
             </div>
           </li>
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''EMPLOYER'') or hasRole(''ONLY_FOR_VIEW'')')}">
+          <li class="nav-item dropdown"
+              th:if="${#authorization.expression('hasRole(''EMPLOYER'') or hasRole(''ONLY_FOR_VIEW'')')}">
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Employer</span>
+              <span>Employer</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-              <a class="dropdown-item" href="/shipments/new">Create a new shipment</a>
-              <a class="dropdown-item" href="/shipments/list">List of created shipments</a>
+              <a class="dropdown-item" href="/shipments/employer/new">Create a new shipment</a>
+              <a class="dropdown-item" href="/shipments/employer/list">List of created shipments</a>
             </div>
           </li>
           <!-- --->
-          <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ONLY_FOR_VIEW'')')}"
+          <li class="nav-item dropdown"
+              th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ONLY_FOR_VIEW'')')}"
           >
             <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-              <span >Performer</span>
+              <span>Performer</span>
             </a>
             <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-              <a class="dropdown-item" href="/shipments/list">Taken shipments</a>
-              <a class="dropdown-item" href="/shipments/list">Take new shipment</a>
+              <a class="dropdown-item" href="/shipments/performer/list/taken">Taken shipments</a>
+              <a class="dropdown-item" href="/shipments/performer/list/new">Take new shipment</a>
             </div>
           </li>
           <!-- --->
-          <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" href="/auth/login"><span>Login</span></a></li>
-          <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" href="/auth/registration"><span>Register</span></a></li>
+          <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link" href="/auth/login"><span>Login</span></a>
+          </li>
+          <li class="nav-item" sec:authorize="!isAuthenticated()"><a class="nav-link"
+                                                                     href="/auth/registration"><span>Register</span></a>
+          </li>
           <li class="nav-item" sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post" class="logout-form">
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-              <a class="nav-link" >
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+              <a class="nav-link">
                 <button type="submit" sec:authorize="isAuthenticated()">Logout</button>
               </a>
             </form>
           </li>
           <!-- --->
         </ul>
-        <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+        <div class="text-center d-none d-md-inline">
+          <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
+        </div>
       </div>
     </nav>
     <div class="d-flex flex-column" id="content-wrapper">
       <div id="content">
         <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
-          <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+          <div class="container-fluid">
+            <button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i
+                    class="fas fa-bars"></i></button>
             <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
             </form>
             <ul class="navbar-nav flex-nowrap ms-auto">
-              <li class="nav-item dropdown d-sm-none no-arrow" style=""><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#"><i class="fas fa-search"></i></a>
-                <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in" aria-labelledby="searchDropdown">
+              <li class="nav-item dropdown d-sm-none no-arrow" style=""><a class="dropdown-toggle nav-link"
+                                                                           aria-expanded="false"
+                                                                           data-bs-toggle="dropdown" href="#"><i
+                      class="fas fa-search"></i></a>
+                <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in"
+                     aria-labelledby="searchDropdown">
                   <form class="me-auto navbar-search w-100">
-                    <div class="input-group"><input class="bg-light form-control border-0 small" type="text" placeholder="Search for ...">
-                      <div class="input-group-append"><button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button></div>
+                    <div class="input-group"><input class="bg-light form-control border-0 small"
+                                                    type="text" placeholder="Search for ...">
+                      <div class="input-group-append">
+                        <button class="btn btn-primary py-0" type="button"><i
+                                class="fas fa-search"></i></button>
+                      </div>
                     </div>
                   </form>
                 </div>
               </li>
               <li class="nav-item dropdown no-arrow">
                 <div class="nav-item dropdown no-arrow">
-                  <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#" sec:authorize="isAuthenticated()">
-                    <span class="d-none d-lg-inline me-2 text-gray-600" sec:authentication="name"></span>
+                  <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
+                     href="#" sec:authorize="isAuthenticated()">
+                                    <span class="d-none d-lg-inline me-2 text-gray-600"
+                                          sec:authentication="name"></span>
                   </a>
                   <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
-                    <a class="dropdown-item" href="/profile" sec:authorize="isAuthenticated()" th:if="${not #authorization.expression('hasRole(''ADMIN'')')}">Profile</a>
-                    <a class="dropdown-item" href="/changeCredentials" sec:authorize="isAuthenticated()">Change Credentials</a>
+                    <div th:if="${not #authorization.expression('hasRole(''ADMIN'')')}">
+                      <div th:if="${#authorization.expression('hasRole(''EMPLOYER'') or hasRole(''ONLY_FOR_VIEW'')')}">
+                        <a class="dropdown-item" href="/employer/profile" sec:authorize="isAuthenticated()">Profile</a>
+                      </div>
+                      <div th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ONLY_FOR_VIEW'')')}">
+                        <a class="dropdown-item" href="/performer/profile" sec:authorize="isAuthenticated()">Profile</a>
+                      </div>
+                    </div>
+                    <a class="dropdown-item" href="/changeCredentials"
+                       sec:authorize="isAuthenticated()">Change Credentials</a>
                     <div class="dropdown-divider" sec:authorize="isAuthenticated()"></div>
-                    <a class="dropdown-item" href="/auth/login" sec:authorize="!isAuthenticated()">Login</a>
-                    <a class="dropdown-item" href="/auth/registration" sec:authorize="!isAuthenticated()">Register</a>
+                    <a class="dropdown-item" href="/auth/login"
+                       sec:authorize="!isAuthenticated()">Login</a>
+                    <a class="dropdown-item" href="/auth/registration"
+                       sec:authorize="!isAuthenticated()">Register</a>
                     <form th:action="@{/logout}" method="post" class="logout-form">
-                      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                      <button type="submit" class="dropdown-item" sec:authorize="isAuthenticated()">Logout</button>
+                      <input type="hidden" th:name="${_csrf.parameterName}"
+                             th:value="${_csrf.token}"/>
+                      <button type="submit" class="dropdown-item" sec:authorize="isAuthenticated()">
+                        Logout
+                      </button>
                     </form>
                   </div>
                 </div>
@@ -122,50 +163,6 @@
           </div>
         </nav>
         <!-- --->
-        <div class="container-fluid" th:if="${#authorization.expression('hasRole(''EMPLOYER'') or hasRole(''ADMIN'')')}">
->>>>>>> 27ef9234202377ce99af09b80a34b7b953f5ba85
-          <h3 class="text-dark mb-2">Profile</h3>
-
-          <div class="row mb-3">
-            <div class="col-lg-12">
-
-              <div class="row">
-                <div class="col">
-                  <div class="card shadow mb-3">
-                    <div class="card-header py-3">
-                      <p class="text-primary m-0 fw-bold">User Settings</p>
-                    </div>
-                    <div class="card-body">
-                        <form th:action="@{/profile}" th:object="${profile}" method="post">
-                        <div class="row">
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Full Name</strong></label><input class="form-control" type="text"  placeholder="Peter Jone White"  required="" th:field="*{fullName}" ></div>
-                          </div>
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Email Address</strong></label><input class="form-control" type="email"  placeholder="peter@example.com" required="" readonly th:field="*{email}"></div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Phone Number</strong></label><input class="form-control" type="text"  placeholder="+380000000000"  required="" th:field="*{phone}"></div>
-                          </div>
-                          <div class="col">
-                            <div class="mb-3"><label class="form-label" ><strong>Address</strong></label><input class="form-control" type="text" id="address"  placeholder="вулиця Лукаша, 5, Львів, Львівська область, Україна"  required="" th:field="*{address}"></div>
-                          </div>
-                        </div>
-                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div>
-        </div>
-
-
-
-
-      </div>
         <div class="container-fluid" th:if="${#authorization.expression('hasRole(''PERFORMER'') or hasRole(''ONLY_FOR_VIEW'')')}">
           <h3 class="text-dark mb-2">Profile</h3>
           <div class="row mb-3">
@@ -177,7 +174,7 @@
                       <p class="text-primary m-0 fw-bold" >Performer Settings</p>
                     </div>
                     <div class="card-body">
-                      <form th:action="@{/profile}" th:object="${profile}" method="post">
+                      <form th:action="@{/performer/profile}" th:object="${profile}" method="post">
 
                         <div class="row">
                           <div class="col text-center bg-light">
@@ -238,7 +235,6 @@
 
           </div>
         </div>
-
         <footer class="bg-white sticky-footer">
           <div class="container my-auto">
             <div class="text-center my-auto copyright"><span>POSTSERVICE 2023</span></div>

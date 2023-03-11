@@ -11,15 +11,14 @@ import java.util.Optional;
 
 public interface ShipmentRepository extends JpaRepository<Shipment, Integer> {
 
+    @Query("SELECT s FROM Shipment s ORDER BY s.id DESC")
+    List<Shipment> findAllInDecOrder();
+
+    @Query("SELECT s FROM Shipment s WHERE s.person.id = :personId ORDER BY s.id DESC")
+    List<Shipment> findAllInDecOrderForCurrentPerson(@Param("personId") Integer personId);
+
     @Modifying
     @Query("UPDATE Shipment s SET s.senderEmail = :newEmail WHERE s.person.id = :personId")
     void updateSenderEmail(@Param("newEmail") String newEmail, @Param("personId") Integer personId);
-
-    @Query("SELECT s FROM Shipment s ORDER BY s.id DESC")
-    List<Shipment> findAllInDescOrder();
-
     void deleteById(Integer id);
-
-//    Optional<Shipment> fingById(Integer id);
-
 }

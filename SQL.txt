@@ -24,6 +24,7 @@ CREATE TABLE profile
     car_license_plate VARCHAR(100),
     car_model         VARCHAR(100),
     status            VARCHAR(100),
+    sending_time            VARCHAR(255)                   NOT NULL,
     person_id         INTEGER      NOT NULL,
     FOREIGN KEY (person_id) REFERENCES person (id)
 );

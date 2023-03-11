@@ -5,9 +5,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ua.moisak.PostService.models.Profile;
+import ua.moisak.PostService.models.Shipment;
+
+import java.util.List;
 
 public interface ProfileRepository extends JpaRepository<Profile, Integer> {
-    void deleteByEmail(String email);
+    @Query("SELECT p FROM Profile p ORDER BY p.id DESC")
+    List<Profile> findAllInDecOrder();
+
+    @Query("SELECT p FROM Profile p WHERE p.carModel!=null ORDER BY p.id DESC")
+    List<Profile> findAllInDecOrderForPerformers();
 
     @Modifying
     @Query("UPDATE Profile p SET p.email = :newEmail WHERE p.person.id = :personId")

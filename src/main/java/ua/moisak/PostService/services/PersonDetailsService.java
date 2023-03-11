@@ -20,10 +20,16 @@ public class PersonDetailsService implements UserDetailsService {
 
     private final PeopleRepository peopleRepository;
 
-
     @Autowired
     public PersonDetailsService(PeopleRepository peopleRepository) {
         this.peopleRepository = peopleRepository;
+    }
+
+    public Person findById(Integer id) {
+        return peopleRepository.findById(id).orElse(null);
+    }
+    public Person findByUsername(String username) {
+        return peopleRepository.findByUsername(username).orElse(null);
     }
 
     @Override
@@ -35,20 +41,7 @@ public class PersonDetailsService implements UserDetailsService {
 
         return new PersonDetails(person.get());
     }
-    public Person findByUsername(String username) {
-        return peopleRepository.findByUsername(username).orElse(null);
-    }
 
-
-    public Person findById(Integer id) {
-        return peopleRepository.findById(id).orElse(null);
-    }
-
-    public Person getCurrentUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String usermane = authentication.getName();
-        return peopleRepository.findByUsername(usermane).orElse(null);
-    }
 
     public void delete(Person person) {
        peopleRepository.delete(person);
@@ -56,6 +49,12 @@ public class PersonDetailsService implements UserDetailsService {
 
     public void save(Person person) {
         peopleRepository.save(person);
+    }
+
+    public Person getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String usermane = authentication.getName();
+        return peopleRepository.findByUsername(usermane).orElse(null);
     }
 
     public String[] getListFromString(String str) {
