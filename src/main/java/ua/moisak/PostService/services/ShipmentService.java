@@ -140,7 +140,6 @@ public class ShipmentService {
         shipment.setInvoice(inv);
         shipment.setStatus(ShipmentStatus.PENDING);
         shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());
-
         //compress photo and set
         shipment.setShipmentPhoto(Base64.getEncoder().encodeToString(photo.getBytes()));
 

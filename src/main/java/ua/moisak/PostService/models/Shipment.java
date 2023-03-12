@@ -75,8 +75,10 @@ public class Shipment {
     private String shipmentPackaging;
 
     @Column(name = "shipment_price", nullable = false)
-    private Integer shipmentPrice;
+    private Float shipmentPrice;
 
+    @Column(name = "shipment_price_total", nullable = false)
+    private Float shipmentPriceTotal;
     @Column(name = "shipment_long_description", nullable = false)
     private String shipmentLongDescription;
 

@@ -44,6 +44,8 @@ public class ShipmentController {
     public String getAllShipments(Model model) {
         List<Shipment> shipments = shipmentService.findAllInDescOrderForCurrentPerson(personDetailsService.getCurrentUser().getId());
         model.addAttribute("shipments", shipments);
+        model.addAttribute("PENDING",ShipmentStatus.PENDING);
+
         return "/shipments/employer/list";
     }
 
@@ -52,6 +54,7 @@ public class ShipmentController {
     @GetMapping("/employer/{id}")
     public String getShipmentById(@PathVariable Integer id, Model model) {
         Shipment shipment = shipmentService.findById(id);
+
         model.addAttribute("shipment", shipment);
         return "/shipments/employer/shipment";
     }
@@ -157,6 +160,7 @@ public class ShipmentController {
     @GetMapping("/performer/list")
     public String getAllShipmentsForPerformer(Model model) {
         List<Shipment> shipments = shipmentService.findAllInDecOrderForStatusPending();
+
         model.addAttribute("shipments", shipments);
         model.addAttribute("profile", personDetailsService.getCurrentUser().getProfile());
         model.addAttribute("VALIDATED", PerformerProfileStatus.VALIDATED);

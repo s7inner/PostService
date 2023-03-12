@@ -220,16 +220,13 @@
                                     <td>
                                         <div>
                                             <form method="get" th:action="@{/shipments/employer/{id}(id=${shipment.id})}">
-                                                <button type="submit" class="btn btn-sm btn-primary" style="width:34px; height:34px;"><i class="far fa-eye"></i></button>
+                                                <button type="submit" class="btn btn-sm btn-primary" style="width:60px; height:34px;">View</button>
                                             </form>
                                         </div>
                                         <div>
                                             <form method="post" th:action="@{/shipments/performer/list/{id}(id=${shipment.id})}">
                                                 <div class="pt-1 pd-1">
-                                                <button type="submit" class="btn btn-sm btn-success" style="width:34px; height:34px;">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg text-white" viewBox="0 0 16 16">
-                                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
-                                                    </svg>
+                                                <button type="submit" class="btn btn-sm btn-success text-white" style="width:60px; height:34px;">Take
                                                 </button>
                                                 </div>
                                             </form>

@@ -200,7 +200,7 @@
                                     <th scope="col">Photo</th>
                                     <th scope="col">Invoice</th>
                                     <th scope="col">Creation Time</th>
-                                    <th scope="col">Price($)</th>
+                                    <th scope="col">Total Price($)</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Actions</th>
 
@@ -214,7 +214,7 @@
                                                          style="width: 100px;height: 100px;"></th>
                                     <td th:text="${shipment.invoice}"></td>
                                     <td th:text="${shipment.localDateTime}"></td>
-                                    <td th:text="${shipment.shipmentPrice}"></td>
+                                    <td th:text="${shipment.shipmentPriceTotal}"></td>
                                     <td th:text="${shipment.status}"></td>
                                     <td>
                                         <div>
@@ -226,14 +226,14 @@
                                         </div>
 
                                         <div class="pt-1 pb-1"
-                                             th:if="${shipment.status != 'PENDING' and shipment.status != 'FAILED'}">
+                                             th:if="${shipment.status == PENDING}">
                                             <form method="get"
                                                   th:action="@{/shipments/employer/update/{id}(id=${shipment.id})}">
                                                 <button type="submit" class="btn btn-sm btn-success"><i
                                                         class="fas fa-edit text-white"></i></button>
                                             </form>
                                         </div>
-                                        <div>
+                                        <div th:if="${shipment.status == PENDING}">
                                             <form method="post" th:action="@{/shipments/employer/delete}">
                                                 <input type="hidden" name="id" th:value="${shipment.id}"/>
                                                 <button style="width: 33.35px;height: 30.6px;" type="submit"
