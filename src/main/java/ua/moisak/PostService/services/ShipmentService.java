@@ -43,16 +43,18 @@ public class ShipmentService {
         return shipmentRepository.findById(id).orElse(null);
     }
 
-    public List<Shipment> findAll() {
-        return  shipmentRepository.findAll();
-    }
-
-    public List<Shipment> findAllInDescOrder() {
-        return shipmentRepository.findAllInDecOrder();
-    }
-
     public List<Shipment> findAllInDecOrderForStatusPending() {
         return shipmentRepository.findAllInDecOrderForStatusPending();
+    }
+
+    public List<Shipment> findAll_TAKEN_InDecOrder() {
+        return shipmentRepository.findAll_TAKEN_InDecOrder();
+    }
+    public List<Shipment> findAll_IN_TRANSIT_InDecOrder() {
+        return shipmentRepository.findAll_IN_TRANSIT_InDecOrder();
+    }
+    public List<Shipment> findAll_DELIVERED_InDecOrder() {
+        return shipmentRepository.findAll_DELIVERED_InDecOrder();
     }
 
     public List<Shipment> findAllInDescOrderForCurrentPerson(Integer id) {

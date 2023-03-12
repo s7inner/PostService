@@ -13,7 +13,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Integer> {
     @Query("SELECT p FROM Profile p ORDER BY p.id DESC")
     List<Profile> findAllInDecOrder();
 
-    @Query("SELECT p FROM Profile p WHERE p.carModel!=null ORDER BY p.id DESC")
+    @Query("SELECT p FROM Profile p WHERE p.status='NOT_VALIDATED' ORDER BY p.id DESC")
     List<Profile> findAllInDecOrderForPerformers();
 
     @Modifying
