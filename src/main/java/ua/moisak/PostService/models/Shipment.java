@@ -99,6 +99,9 @@ public class Shipment {
     @Column(name = "duration", nullable = false)
     private String duration;
 
+    @Column(name = "performer_id")
+    private Integer performer_id;
+
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
     private Person person;

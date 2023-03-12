@@ -14,14 +14,18 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Integer> {
     @Query("SELECT s FROM Shipment s WHERE s.status = 'PENDING' ORDER BY s.id DESC")
     List<Shipment> findAllInDecOrderForStatusPending();
 
-    @Query("SELECT s FROM Shipment s WHERE s.status = 'TAKEN' ORDER BY s.id DESC")
-    List<Shipment> findAll_TAKEN_InDecOrder();
 
-    @Query("SELECT s FROM Shipment s WHERE s.status = 'IN_TRANSIT' ORDER BY s.id DESC")
-    List<Shipment> findAll_IN_TRANSIT_InDecOrder();
 
-    @Query("SELECT s FROM Shipment s WHERE s.status = 'DELIVERED' ORDER BY s.id DESC")
-    List<Shipment> findAll_DELIVERED_InDecOrder();
+    @Query("SELECT s FROM Shipment s WHERE s.status = 'TAKEN' and s.performer_id = :performer_id ORDER BY s.id DESC")
+    List<Shipment> findAllById_TAKEN_InDecOrder(@Param("performer_id") Integer performer_id);
+
+    @Query("SELECT s FROM Shipment s WHERE s.status = 'IN_TRANSIT' and s.performer_id = :performer_id ORDER BY s.id DESC")
+    List<Shipment> findAllById_IN_TRANSIT_InDecOrder(@Param("performer_id") Integer performer_id);
+
+    @Query("SELECT s FROM Shipment s WHERE s.status = 'DELIVERED' and s.performer_id = :performer_id ORDER BY s.id DESC")
+    List<Shipment> findAllById_DELIVERED_InDecOrder(@Param("performer_id") Integer performer_id);
+
+
     @Query("SELECT s FROM Shipment s WHERE s.person.id = :personId ORDER BY s.id DESC")
     List<Shipment> findAllInDecOrderForCurrentPerson(@Param("personId") Integer personId);
 

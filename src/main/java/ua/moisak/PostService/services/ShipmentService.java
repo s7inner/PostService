@@ -47,14 +47,14 @@ public class ShipmentService {
         return shipmentRepository.findAllInDecOrderForStatusPending();
     }
 
-    public List<Shipment> findAll_TAKEN_InDecOrder() {
-        return shipmentRepository.findAll_TAKEN_InDecOrder();
+    public List<Shipment> findAllById_TAKEN_InDecOrder(Integer performerId) {
+        return shipmentRepository.findAllById_TAKEN_InDecOrder(performerId);
     }
-    public List<Shipment> findAll_IN_TRANSIT_InDecOrder() {
-        return shipmentRepository.findAll_IN_TRANSIT_InDecOrder();
+    public List<Shipment> findAllById_IN_TRANSIT_InDecOrder(Integer performerId) {
+        return shipmentRepository.findAllById_IN_TRANSIT_InDecOrder(performerId);
     }
-    public List<Shipment> findAll_DELIVERED_InDecOrder() {
-        return shipmentRepository.findAll_DELIVERED_InDecOrder();
+    public List<Shipment> findAllById_DELIVERED_InDecOrder(Integer performerId) {
+        return shipmentRepository.findAllById_DELIVERED_InDecOrder(performerId);
     }
 
     public List<Shipment> findAllInDescOrderForCurrentPerson(Integer id) {

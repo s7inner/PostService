@@ -125,6 +125,7 @@ public class ShipmentController {
     public String takeShipmentByPerformer(@PathVariable Integer id) {
         Shipment shipment = shipmentService.findById(id);
         shipment.setStatus(ShipmentStatus.TAKEN);
+        shipment.setPerformer_id(personDetailsService.getCurrentUser().getId());
 
         shipmentService.save(shipment);
         return "redirect:/shipments/performer/list";
@@ -134,6 +135,8 @@ public class ShipmentController {
     public String setStatus_UNTAKE(@PathVariable Integer id) {
         Shipment shipment = shipmentService.findById(id);
         shipment.setStatus(ShipmentStatus.PENDING);
+        shipment.setPerformer_id(null);
+
 
         shipmentService.save(shipment);
         return "redirect:/shipments/performer/list/taken";
@@ -170,13 +173,15 @@ public class ShipmentController {
     @PreAuthorize("hasAnyRole('PERFORMER', 'ONLY_FOR_VIEW')")
     @GetMapping("/performer/list/taken")
     public String getAllTakenShipmentsForPerformer(Model model) {
-        List<Shipment> shipmentsTAKEN = shipmentService.findAll_TAKEN_InDecOrder();
+        Integer performerId = personDetailsService.getCurrentUser().getId();
+
+        List<Shipment> shipmentsTAKEN = shipmentService.findAllById_TAKEN_InDecOrder(performerId);
         model.addAttribute("shipmentsTAKEN", shipmentsTAKEN);
 
-        List<Shipment> shipmentsIN_TRANSIT = shipmentService.findAll_IN_TRANSIT_InDecOrder();
+        List<Shipment> shipmentsIN_TRANSIT = shipmentService.findAllById_IN_TRANSIT_InDecOrder(performerId);
         model.addAttribute("shipmentsIN_TRANSIT", shipmentsIN_TRANSIT);
 
-        List<Shipment> shipmentsDELIVERED = shipmentService.findAll_DELIVERED_InDecOrder();
+        List<Shipment> shipmentsDELIVERED = shipmentService.findAllById_DELIVERED_InDecOrder(performerId);
         model.addAttribute("shipmentsDELIVERED", shipmentsDELIVERED);
 
         model.addAttribute("profile", personDetailsService.getCurrentUser().getProfile());

@@ -24,7 +24,7 @@ CREATE TABLE profile
     car_license_plate VARCHAR(100),
     car_model         VARCHAR(100),
     status            VARCHAR(100),
-    sending_time            VARCHAR(255)                   NOT NULL,
+    sending_time      VARCHAR(255) NOT NULL,
     person_id         INTEGER      NOT NULL,
     FOREIGN KEY (person_id) REFERENCES person (id)
 );
@@ -50,13 +50,15 @@ CREATE TABLE shipment
     shipment_height            INTEGER                        NOT NULL,
     shipment_weight_volumetric INTEGER                        NOT NULL,
     shipment_packaging         VARCHAR(255)                   NOT NULL,
-    shipment_price             INTEGER                        NOT NULL,
+    shipment_price             FLOAT                          NOT NULL,
+    shipment_price_total       FLOAT                          NOT NULL,
     shipment_long_description  VARCHAR(255)                   NOT NULL,
     local_date_time            VARCHAR(255)                   NOT NULL,
     shipment_photo             VARCHAR(255)                   NOT NULL,
     status                     VARCHAR(255)                   NOT NULL,
     distance                   VARCHAR(255)                   NOT NULL,
     duration                   VARCHAR(255)                   NOT NULL,
+    performer_id               INTEGER,
     person_id                  INTEGER REFERENCES person (id) NOT NULL
 );
 
