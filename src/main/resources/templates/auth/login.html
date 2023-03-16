@@ -27,7 +27,9 @@
                 <h4 class="text-dark mb-3">Enter your credentials:</h4>
               </div>
               <form action="/process_login" method="post" name="f">
+<!--
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" style="">
+-->
                 <div class="mb-3">
                   <input type="email" class="form-control" name="username" id="username" placeholder="Email@gmail.com" required="required">
                 </div>
