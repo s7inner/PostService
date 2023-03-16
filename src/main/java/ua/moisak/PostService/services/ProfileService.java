@@ -2,6 +2,7 @@ package ua.moisak.PostService.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.moisak.PostService.enums.PerformerProfileStatus;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.models.Profile;
 import ua.moisak.PostService.repositories.ProfileRepository;
@@ -18,6 +19,14 @@ public class ProfileService {
     public ProfileService(ProfileRepository profileRepository, PersonDetailsService personDetailsService) {
         this.profileRepository = profileRepository;
         this.personDetailsService = personDetailsService;
+    }
+
+    public List<Profile> getAllProfiles(){
+        return profileRepository.findAll();
+    }
+
+    public Profile findByEmail(String email){
+        return profileRepository.findByEmail(email).orElse(null);
     }
 
     public Profile findById(Integer id){
@@ -60,6 +69,26 @@ public class ProfileService {
     public void updateEmail(Person person) {
         // update corresponding shipment senderEmail
         profileRepository.updateSenderEmail(person.getUsername(), person.getId());
+    }
+
+    public Profile getCurrentProfile(){
+        return personDetailsService.getCurrentUser().getProfile();
+    }
+
+    public void deleteById(Integer id){
+        profileRepository.deleteById(id);
+    }
+    public Profile setAdditionalFields(Profile profile){
+        Person person = personDetailsService.getCurrentUser();
+
+        if(person.getRole().equals("ROLE_PERFORMER")){
+            profile.setStatus(PerformerProfileStatus.NOT_VALIDATED);
+        }
+
+        profile.setEmail(person.getUsername());
+        profile.setSendingTime(LocalDataTimeUtil.getLocalDateTimeWithFormatter());
+        profile.setPerson(person);
+        return profile;
     }
 
 

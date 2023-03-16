@@ -40,13 +40,13 @@ public class Profile {
     @Enumerated(EnumType.STRING)
     private PerformerProfileStatus status;
 
+    //-----------------------------------------
     @Column(name = "sending_time", nullable = false)
     private String sendingTime;
-
-    //-----------------------------------------
     @OneToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person person;
+
 
 
     public Profile() {

@@ -29,12 +29,8 @@ public class Person {
     @Column(name = "role")
     private String role;
 
-//    @OneToOne(mappedBy = "person")
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     private Profile profile;
-
-
-//    @OneToOne(mappedBy = "person")
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<Shipment> shipments;
