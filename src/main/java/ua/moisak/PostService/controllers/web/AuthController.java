@@ -1,4 +1,4 @@
-package ua.moisak.PostService.controllers;
+package ua.moisak.PostService.controllers.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

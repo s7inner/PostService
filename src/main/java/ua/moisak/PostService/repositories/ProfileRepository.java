@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ua.moisak.PostService.models.Profile;
-import ua.moisak.PostService.models.Shipment;
-
 import java.util.List;
 
 public interface ProfileRepository extends JpaRepository<Profile, Integer> {

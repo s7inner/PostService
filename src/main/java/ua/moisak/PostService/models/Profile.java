@@ -1,19 +1,9 @@
 package ua.moisak.PostService.models;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
 import ua.moisak.PostService.enums.PerformerProfileStatus;
-import ua.moisak.PostService.enums.ShipmentStatus;
-
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-import java.util.List;
-import java.util.Objects;
-
 
 @Entity
 @Getter

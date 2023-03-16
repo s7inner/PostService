@@ -1,4 +1,4 @@
-package ua.moisak.PostService.controllers;
+package ua.moisak.PostService.controllers.web;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;

@@ -26,9 +26,7 @@ public class ShipmentService {
 
     private final ShipmentRepository shipmentRepository;
     private final PeopleRepository peopleRepository;
-
     private final PersonDetailsService personDetailsService;
-
 
     public ShipmentService(ShipmentRepository shipmentRepository, PeopleRepository peopleRepository, PersonDetailsService personDetailsService) {
         this.shipmentRepository = shipmentRepository;

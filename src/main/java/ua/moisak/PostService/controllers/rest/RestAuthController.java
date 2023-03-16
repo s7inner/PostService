@@ -1,4 +1,4 @@
-package ua.moisak.PostService.controllers;
+package ua.moisak.PostService.controllers.rest;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +54,7 @@ public class RestAuthController {
         personValidator.validate(person, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return Map.of("message", "Error!");
+            return Map.of("message", "Invalid credentials or user with this username already exist!");
         }
 
         registrationService.register(person);

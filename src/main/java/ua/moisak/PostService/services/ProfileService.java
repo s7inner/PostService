@@ -4,14 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.moisak.PostService.models.Person;
 import ua.moisak.PostService.models.Profile;
-import ua.moisak.PostService.models.Shipment;
-import ua.moisak.PostService.repositories.PeopleRepository;
 import ua.moisak.PostService.repositories.ProfileRepository;
 import ua.moisak.PostService.util.LocalDataTimeUtil;
-
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
