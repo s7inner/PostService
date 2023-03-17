@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class PersonDTO {
+    private int id;
     @NotEmpty(message = "Name must not be empty")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters long")
     private String username;

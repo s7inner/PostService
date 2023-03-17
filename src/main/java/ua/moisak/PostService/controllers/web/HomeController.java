@@ -43,6 +43,10 @@ public class HomeController {
         return "home/home";
     }
 
+    @GetMapping("/rest")
+    public String getRest() {
+        return "home/rest";
+    }
 
     @GetMapping("/changeCredentials")
     @PreAuthorize("isAuthenticated()")

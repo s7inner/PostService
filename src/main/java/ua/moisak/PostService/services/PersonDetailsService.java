@@ -9,9 +9,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.moisak.PostService.models.Person;
+import ua.moisak.PostService.models.Profile;
 import ua.moisak.PostService.repositories.PeopleRepository;
 import ua.moisak.PostService.security.PersonDetails;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,6 +57,10 @@ public class PersonDetailsService implements UserDetailsService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String usermane = authentication.getName();
         return peopleRepository.findByUsername(usermane).orElse(null);
+    }
+
+    public List<Person> findAll() {
+        return  peopleRepository.findAll();
     }
 
     public String[] getListFromString(String str) {

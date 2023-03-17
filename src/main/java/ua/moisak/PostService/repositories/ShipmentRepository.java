@@ -12,7 +12,11 @@ public interface ShipmentRepository extends JpaRepository<Shipment, Integer> {
     @Query("SELECT s FROM Shipment s WHERE s.status = 'PENDING' ORDER BY s.id DESC")
     List<Shipment> findAllInDecOrderForStatusPending();
 
+    @Query("SELECT s FROM Shipment s ORDER BY s.id DESC")
+    List<Shipment> findAllInDecOrder();
 
+    @Query("SELECT s FROM Shipment s WHERE s.performer_id = :performer_id ORDER BY s.id DESC")
+    List<Shipment> findAllByIdForPerformer(@Param("performer_id") Integer performer_id);
 
     @Query("SELECT s FROM Shipment s WHERE s.status = 'TAKEN' and s.performer_id = :performer_id ORDER BY s.id DESC")
     List<Shipment> findAllById_TAKEN_InDecOrder(@Param("performer_id") Integer performer_id);

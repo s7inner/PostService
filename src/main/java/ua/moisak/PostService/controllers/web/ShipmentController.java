@@ -16,7 +16,6 @@ import ua.moisak.PostService.models.Shipment;
 import ua.moisak.PostService.repositories.ShipmentRepository;
 import ua.moisak.PostService.services.PersonDetailsService;
 import ua.moisak.PostService.services.ShipmentService;
-import ua.moisak.PostService.util.ImageUtil;
 import ua.moisak.PostService.util.LocalDataTimeUtil;
 
 import javax.servlet.http.HttpServletRequest;

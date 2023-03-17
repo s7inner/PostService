@@ -55,7 +55,7 @@ CREATE TABLE shipment
     shipment_price_total       FLOAT                          NOT NULL,
     shipment_long_description  VARCHAR(255)                   NOT NULL,
     local_date_time            VARCHAR(255)                   NOT NULL,
-    shipment_photo             VARCHAR(255)                   NOT NULL,
+    shipment_photo             VARCHAR(255)                   ,
     status                     VARCHAR(255)                   NOT NULL,
     distance                   VARCHAR(255)                   NOT NULL,
     duration                   VARCHAR(255)                   NOT NULL,

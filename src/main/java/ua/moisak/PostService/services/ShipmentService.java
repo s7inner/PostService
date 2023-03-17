@@ -45,6 +45,10 @@ public class ShipmentService {
         return shipmentRepository.findAllInDecOrderForStatusPending();
     }
 
+    public List<Shipment> findAllInDecOrder() {
+        return shipmentRepository.findAllInDecOrder();
+    }
+
     public List<Shipment> findAllById_TAKEN_InDecOrder(Integer performerId) {
         return shipmentRepository.findAllById_TAKEN_InDecOrder(performerId);
     }
@@ -57,6 +61,10 @@ public class ShipmentService {
 
     public List<Shipment> findAllInDescOrderForCurrentPerson(Integer id) {
         return shipmentRepository.findAllInDecOrderForCurrentPerson(id);
+    }
+
+    public List<Shipment> findAllByIdForPerformer(Integer id) {
+        return shipmentRepository.findAllByIdForPerformer(id);
     }
 
     public Shipment findLastShipment() {
@@ -129,7 +137,6 @@ public class ShipmentService {
                 shipment.getRecipientEmail(),
                 shipment.getRecipientPhone(),
                 shipment.getDestination(),
-                shipment.getShipmentPhoto(),
                 shipment.getLocalDateTime(),
                 String.valueOf(new Random().nextInt(1000))
         };
@@ -142,6 +149,35 @@ public class ShipmentService {
         shipment.setShipmentPhoto(Base64.getEncoder().encodeToString(photo.getBytes()));
 
         Person person = personDetailsService.getCurrentUser();
+        shipment.setPerson(person);
+
+        return shipment;
+    }
+
+    public Shipment setAdditionFieldsREST(Shipment shipment) throws IOException {
+        shipment.setLocalDateTime(LocalDataTimeUtil.getLocalDateTimeWithFormatter());
+        String[] stringsFonUnicueNumber = {
+                shipment.getSenderFullName(),
+                shipment.getSenderEmail(),
+                shipment.getSenderPhone(),
+                shipment.getOrigin(),
+
+                shipment.getRecipientFullName(),
+                shipment.getRecipientEmail(),
+                shipment.getRecipientPhone(),
+                shipment.getDestination(),
+                shipment.getLocalDateTime(),
+                String.valueOf(new Random().nextInt(1000))
+        };
+
+        String inv = generateUniqueNumber(stringsFonUnicueNumber);
+        shipment.setInvoice(inv);
+        shipment.setStatus(ShipmentStatus.PENDING);
+        shipment.setWeightVolumetric(shipment.calculateWeightVolumetric());
+        shipment.setShipmentPriceTotal((float) (shipment.getShipmentPrice()*1.1));
+
+        Person person = personDetailsService.getCurrentUser();
+        shipment.setSenderEmail(person.getUsername());
         shipment.setPerson(person);
 
         return shipment;

@@ -3,6 +3,7 @@ package ua.moisak.PostService.controllers.rest;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.moisak.PostService.dto.EmployerProfileDTO;
 import ua.moisak.PostService.dto.PerformerProfileDTO;
@@ -27,6 +28,7 @@ public class RestProfileController {
     }
 
     //FOR PERFORMER-----------------------------------------------------------
+    @PreAuthorize("hasAnyRole('PERFORMER', 'ONLY_FOR_VIEW')")
     @GetMapping("/performer")
     public ResponseEntity<PerformerProfileDTO> getProfileForCurrentPerformer(Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -35,7 +37,7 @@ public class RestProfileController {
         }
         return new ResponseEntity<>(modelMapper.map(profile, PerformerProfileDTO.class), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAnyRole('PERFORMER', 'ONLY_FOR_VIEW')")
     @PostMapping("/performer/create")
     public ResponseEntity<String> createProfilePerformer(@RequestBody PerformerProfileDTO performerProfileDTO, Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -52,7 +54,7 @@ public class RestProfileController {
         profileService.save(profile);
         return ResponseEntity.ok("Profile successfully created!");
     }
-
+    @PreAuthorize("hasAnyRole('PERFORMER', 'ONLY_FOR_VIEW')")
     @PutMapping("/performer/update")
     public ResponseEntity<String> updateProfileEmployer(@RequestBody PerformerProfileDTO performerProfileDTO, Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -70,6 +72,7 @@ public class RestProfileController {
         profileService.save(profile);
         return ResponseEntity.ok("Profile successfully updated!");
     }
+    @PreAuthorize("hasAnyRole('PERFORMER', 'ONLY_FOR_VIEW')")
     @DeleteMapping("/performer/delete")
     public ResponseEntity<String> deleteMyProfilePerformer(Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -83,6 +86,7 @@ public class RestProfileController {
     }
 
     //FOR EMPLOYER-----------------------------------------------------------
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     @GetMapping("/employer")
     public ResponseEntity<EmployerProfileDTO> getProfileForCurrentEmployer(Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -91,7 +95,7 @@ public class RestProfileController {
         }
         return new ResponseEntity<>(modelMapper.map(profile, EmployerProfileDTO.class), HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     @PostMapping("/employer/create")
     public ResponseEntity<String> createProfileEmployer(@RequestBody EmployerProfileDTO employerProfileDTO, Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -108,7 +112,7 @@ public class RestProfileController {
         profileService.save(profile);
         return ResponseEntity.ok("Profile successfully created!");
     }
-
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     @PutMapping("/employer/update")
     public ResponseEntity<String> updateProfileEmployer(@RequestBody EmployerProfileDTO employerProfileDTO, Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -126,7 +130,7 @@ public class RestProfileController {
         profileService.save(profile);
         return ResponseEntity.ok("Profile successfully updated!");
     }
-
+    @PreAuthorize("hasAnyRole('EMPLOYER', 'ONLY_FOR_VIEW')")
     @DeleteMapping("/employer/delete")
     public ResponseEntity<String> deleteMyProfileEmployer(Principal principal) {
         Profile profile = profileService.findByEmail(principal.getName());
@@ -141,7 +145,8 @@ public class RestProfileController {
     }
 
     //FOR ADMIN-----------------------------------------------------------
-    @GetMapping("/admin/profiles")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ONLY_FOR_VIEW')")
+    @GetMapping("/admin/list")
     public ResponseEntity<List<PerformerProfileDTO>> getAllProfiles() {
         List<Profile> profiles = profileService.getAllProfiles();
         if(profiles.isEmpty()){
@@ -152,7 +157,7 @@ public class RestProfileController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(profileDTOs);
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'ONLY_FOR_VIEW')")
     @PatchMapping("/admin/validate/{id}")
         public ResponseEntity<String> validateProfilePerformer(@PathVariable Integer id) {
         Profile profile = profileService.findById(id);
