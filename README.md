@@ -45,4 +45,8 @@ You can also view each order:
 
 According to the status of the order, the list of Actions that can be performed with it changes
 
+REST API:
+![rest1](https://user-images.githubusercontent.com/62800741/226137039-58d2079a-d1f0-4231-ab45-1cca124a8b52.PNG)
+![rest2](https://user-images.githubusercontent.com/62800741/226137044-eaa5d201-5dfe-4e1d-9ef9-dd8e1335a09d.PNG)
+
 
